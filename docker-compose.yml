@@ -1,0 +1,136 @@
+version: "2"
+services:
+
+  plex:
+    image: linuxserver/plex
+    container_name: plex
+    network_mode: host
+    environment:
+      - PUID=1026
+      - PGID=101
+      - VERSION=docker
+      - TZ=Europe/London
+    volumes:
+      - /volume1/config/plex:/config
+      - /volume1/tv:/tv
+      - /volume1/movies:/movies
+      - /volume1/music:/music
+      - /volume1/config/plex/transcode:/transcode
+    restart: unless-stopped
+
+  sonarr:
+    image: linuxserver/sonarr
+    container_name: sonarr
+    environment:
+      - PUID=1026
+      - PGID=101
+      - TZ=Europe/London
+    volumes:
+      - /volume1/config/sonarr:/config
+      - /volume1/tv:/tv
+      - /volume1/downloads:/downloads
+    ports:
+      - 32784:8989
+    restart: unless-stopped
+
+  radarr:
+      image: linuxserver/radarr
+      container_name: radarr
+      environment:
+        - PUID=1026
+        - PGID=101
+        - TZ=Europe/London
+      volumes:
+        - /volume1/config/radarr:/config
+        - /volume1/movies:/movies
+        - /volume1/downloads:/downloads
+      ports:
+        - 32783:7878
+      restart: unless-stopped
+
+  sabnzbd:
+    image: linuxserver/sabnzbd
+    container_name: sabnzbd
+    environment:
+      - PUID=1026
+      - PGID=101
+      - TZ=Europe/London
+    volumes:
+      - /volume1/config/sabnzbd:/config
+      - /volume1/downloads:/downloads
+      - /volume1/downloads/incomplete:/incomplete-downloads #optional
+    ports:
+      - 32781:8080
+      - 32782:9090
+    restart: unless-stopped
+
+  transmission:
+    image: linuxserver/transmission
+    container_name: transmission
+    environment:
+      - PUID=1026
+      - PGID=101
+      - TZ=Europe/London
+    volumes:
+      - /volume1/config/transmission:/config
+      - /volume1/downloads:/downloads
+      - /volume1/config/transmission/watch:/watch
+    ports:
+      - 32788:9091
+      - 51413:51413
+      - 51413:51413/udp
+    restart: unless-stopped
+
+  lidarr:
+    image: linuxserver/lidarr
+    container_name: lidarr
+    environment:
+      - PUID=1026
+      - PGID=101
+      - TZ=Europe/London
+    volumes:
+      - /volume1/config/lidarr:/config
+      - /volume1/music:/music
+      - /volume1/downloads:/downloads
+    ports:
+      - 32786:8686
+    restart: unless-stopped
+
+  unifi-controller:
+    image: linuxserver/unifi-controller
+    container_name: unifi-controller
+    environment:
+      - PUID=1026
+      - PGID=101
+      - MEM_LIMIT=1024M
+    volumes:
+      - /volume1/config/unifi-controller:/config
+    ports:
+      - 1900:1900/udp
+      - 10001:10001/udp
+      - 8080:8080
+      - 8843:8843
+      - 8443:8443
+      - 3478:3478/udp
+      - 8880:8880
+      - 6789:6789
+      - 5514:5514
+    restart: unless-stopped
+
+  pihole:
+    extends:
+      service: pihole
+      file: pihole/docker-compose.yaml
+    networks:
+      home:
+        ipv4_address: 192.168.1.201
+
+networks:
+  home:                         # Name of network
+    driver: macvlan                       # Use the macvlan network driver
+    driver_opts:
+      parent: eth0                        # If open vSwitch is disabled use eth0 (or eth1 +)
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24
+          gateway: 192.168.1.1
