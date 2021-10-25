@@ -64,23 +64,6 @@ services:
       - 32782:9090
     restart: unless-stopped
 
-  transmission:
-    image: linuxserver/transmission
-    container_name: transmission
-    environment:
-      - PUID=1026
-      - PGID=101
-      - TZ=Europe/London
-    volumes:
-      - /volume1/config/transmission:/config
-      - /volume1/downloads:/downloads
-      - /volume1/config/transmission/watch:/watch
-    ports:
-      - 32788:9091
-      - 51413:51413
-      - 51413:51413/udp
-    restart: unless-stopped
-
   qbittorrent:
     image: linuxserver/qbittorrent
     container_name: qbittorrent
