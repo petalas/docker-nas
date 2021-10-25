@@ -80,6 +80,23 @@ services:
       - 6881:6881/udp
       - 32789:8080
     restart: unless-stopped
+  
+  deluge:
+    image: linuxserver/deluge
+    container_name: deluge
+    environment:
+      - PUID=1026
+      - PGID=101
+      - TZ=Europe/London
+      - DELUGE_LOGLEVEL=error #optional
+    volumes:
+      - /volume1/config/deluge:/config
+      - /volume1/downloads:/downloads
+    ports:
+      - 32790:8112
+      - 6881:6881
+      - 6881:6881/udp
+    restart: unless-stopped
 
   lidarr:
     image: linuxserver/lidarr
