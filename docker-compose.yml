@@ -63,23 +63,6 @@ services:
       - 32781:8080
       - 32782:9090
     restart: unless-stopped
-
-  qbittorrent:
-    image: linuxserver/qbittorrent
-    container_name: qbittorrent
-    environment:
-      - PUID=1026
-      - PGID=101
-      - TZ=Europe/London
-      - WEBUI_PORT=8080
-    volumes:
-      - /volume1/config/qbittorrent:/config
-      - /volume1/downloads:/downloads
-    ports:
-      - 6881:6881
-      - 6881:6881/udp
-      - 32789:8080
-    restart: unless-stopped
   
   deluge:
     image: linuxserver/deluge
@@ -93,7 +76,7 @@ services:
       - /volume1/config/deluge:/config
       - /volume1/downloads:/downloads
     ports:
-      - 32790:8112
+      - 32789:8112
       - 6881:6881
       - 6881:6881/udp
     restart: unless-stopped
