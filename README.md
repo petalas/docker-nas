@@ -24,6 +24,14 @@ sudo docker-compose pull
 sudo docker-compose up -d
 ```
 
+## To run the sma script manually inside the sonarr-sma container
+### For the container all the dependencies are installed using venv and you need to execute within that environment.
+Example:
+```
+sudo docker exec -it sonarr bash
+/usr/local/sma/venv/bin/python3 /usr/local/sma/manual.py -i "/tv/Dexter/Season 4" -a
+```
+
 ## If you find any of my projects useful, please consider making a small donation:
 |    | Address |
 -----|-----
