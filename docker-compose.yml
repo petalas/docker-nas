@@ -19,14 +19,16 @@ services:
     restart: unless-stopped
 
   sonarr:
-    image: linuxserver/sonarr
+    image: mdhiggins/sonarr-sma
     container_name: sonarr
     environment:
       - PUID=1026
       - PGID=101
       - TZ=Europe/London
+      - SMA_PATH=/usr/local/sma
     volumes:
       - /volume1/config/sonarr:/config
+      - /volume1/config/sma:/usr/local/sma/config
       - /volume1/tv:/tv
       - /volume1/downloads:/downloads
     ports:
