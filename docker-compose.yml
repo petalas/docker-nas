@@ -96,6 +96,19 @@ services:
       - 32786:8686
     restart: unless-stopped
 
+  prowlarr:
+    image: linuxserver/prowlarr:develop
+    container_name: prowlarr
+    environment:
+      - PUID=1026
+      - PGID=101
+      - TZ=Europe/London
+    volumes:
+      - /volume1/config/prowlarr:/config
+    ports:
+      - 32787:9696
+    restart: unless-stopped
+
   unifi-controller:
     image: linuxserver/unifi-controller
     container_name: unifi-controller
