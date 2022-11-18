@@ -32,21 +32,25 @@ services:
     ports:
       - 32784:8989
     restart: unless-stopped
+    networks:
+      home:
 
   radarr:
-      image: linuxserver/radarr
-      container_name: radarr
-      environment:
-        - PUID=1026
-        - PGID=101
-        - TZ=Europe/London
-      volumes:
-        - /volume1/config/radarr:/config
-        - /volume1/movies:/movies
-        - /volume1/downloads:/downloads
-      ports:
-        - 32783:7878
-      restart: unless-stopped
+    image: linuxserver/radarr
+    container_name: radarr
+    environment:
+      - PUID=1026
+      - PGID=101
+      - TZ=Europe/London
+    volumes:
+      - /volume1/config/radarr:/config
+      - /volume1/movies:/movies
+      - /volume1/downloads:/downloads
+    ports:
+      - 32783:7878
+    restart: unless-stopped
+    networks:
+      home:
 
   sabnzbd:
     image: linuxserver/sabnzbd
@@ -63,6 +67,8 @@ services:
       - 32781:8080
       - 32782:9090
     restart: unless-stopped
+    networks:
+      home:
   
   deluge:
     image: linuxserver/deluge
@@ -80,6 +86,8 @@ services:
       - 6881:6881
       - 6881:6881/udp
     restart: unless-stopped
+    networks:
+      home:
 
   lidarr:
     image: linuxserver/lidarr
@@ -95,6 +103,8 @@ services:
     ports:
       - 32786:8686
     restart: unless-stopped
+    networks:
+      home:
 
   prowlarr:
     image: linuxserver/prowlarr:develop
@@ -108,6 +118,8 @@ services:
     ports:
       - 32787:9696
     restart: unless-stopped
+    networks:
+      home:
 
   unifi-controller:
     image: linuxserver/unifi-controller
@@ -129,35 +141,34 @@ services:
       - 6789:6789
       - 5514:5514
     restart: unless-stopped
+    networks:
+      home:
 
   pihole:
     extends:
       service: pihole
       file: pihole/docker-compose.yaml
+    restart: unless-stopped
     networks:
-      home:
+      fake:
         ipv4_address: 192.168.1.201
-      bridge:
 
   nginx-proxy-manager:
     image: 'jc21/nginx-proxy-manager:latest'
     container_name: nginx-proxy-manager
-    ports:
-      - '80:80'
-      - '443:443'
-      - '81:81' # Admin Web Port
+    network_mode: host
     volumes:
       - /volume1/config/nginx-proxy-manager/data:/data
       - /volume1/config/nginx-proxy-manager/letsencrypt:/etc/letsencrypt
-    networks:
-      home:
-        ipv4_address: 192.168.1.202
+    restart: unless-stopped
 
 networks:
-  home:                         # Name of network
-    driver: macvlan                       # Use the macvlan network driver
+  home:
+    driver: bridge
+  fake:
+    driver: macvlan
     driver_opts:
-      parent: eth0                        # If open vSwitch is disabled use eth0 (or eth1 +)
+      parent: eth0
     ipam:
       config:
         - subnet: 192.168.1.0/24
