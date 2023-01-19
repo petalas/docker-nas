@@ -127,7 +127,7 @@ services:
     environment:
       - PUID=1026
       - PGID=101
-      - MEM_LIMIT=1024M
+      - MEM_LIMIT=1024
     volumes:
       - /volume1/config/unifi-controller:/config
     ports:
