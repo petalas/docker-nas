@@ -14,22 +14,15 @@ I figured I'd publish this as a good starting point for anyone who wants to run 
 - sonarr, radarr, lidarr: to keep track of series, movies, music and queue downloads.
 - sabnzbd, deluge: to facilitate the downloads.
 - plex server: to pull metadata and server all the media.
-- pi-hole: DNS sinkhole + DCHP server for network-wide ad-blocking.
 - unifi-controller: to manage my unifi access points.
+
+I also run [pihole](https://pi-hole.net/) (DNS level adblocking) and [unbound](https://www.nlnetlabs.nl/projects/unbound/about/) (validating, recursive, caching DNS resolver) but have moved those to a raspberry pi, config [here](https://github.com/petalas/rpi).
 
 
 ## To update all images and restart containers as needed:
 ```
 sudo docker-compose pull
 sudo docker-compose up -d
-```
-
-## To run the sma script manually inside the sonarr-sma container
-### For the container all the dependencies are installed using venv and you need to execute within that environment.
-Example:
-```
-sudo docker exec -it sonarr bash
-/usr/local/sma/venv/bin/python3 /usr/local/sma/manual.py -i "/tv/Dexter/Season 4" -a
 ```
 
 ## If you find any of my projects useful, please consider making a small donation:

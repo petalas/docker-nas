@@ -144,15 +144,6 @@ services:
     networks:
       home:
 
-  pihole:
-    extends:
-      service: pihole
-      file: pihole/docker-compose.yaml
-    restart: unless-stopped
-    networks:
-      fake:
-        ipv4_address: 192.168.1.201
-
   nginx-proxy-manager:
     image: 'jc21/nginx-proxy-manager:latest'
     container_name: nginx-proxy-manager
@@ -165,11 +156,3 @@ services:
 networks:
   home:
     driver: bridge
-  fake:
-    driver: macvlan
-    driver_opts:
-      parent: eth0
-    ipam:
-      config:
-        - subnet: 192.168.1.0/24
-          gateway: 192.168.1.1
