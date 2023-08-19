@@ -144,6 +144,16 @@ services:
     networks:
       home:
 
+  iperf3:
+    image: networkstatic/iperf3
+    container_name: iperf3
+    ports:
+      - 5201:5201
+    restart: unless-stopped
+    command: -s
+    networks:
+      home:
+
 networks:
   home:
     driver: bridge
