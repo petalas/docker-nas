@@ -121,29 +121,6 @@ services:
     networks:
       home:
 
-  unifi-controller:
-    image: linuxserver/unifi-controller
-    container_name: unifi-controller
-    environment:
-      - PUID=1026
-      - PGID=101
-      - MEM_LIMIT=1024
-    volumes:
-      - /volume1/config/unifi-controller:/config
-    ports:
-      - 1900:1900/udp
-      - 10001:10001/udp
-      - 8080:8080
-      - 8843:8843
-      - 8443:8443
-      - 3478:3478/udp
-      - 8880:8880
-      - 6789:6789
-      - 5514:5514
-    restart: unless-stopped
-    networks:
-      home:
-
   iperf3:
     image: networkstatic/iperf3
     container_name: iperf3
