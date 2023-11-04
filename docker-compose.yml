@@ -11,11 +11,11 @@ services:
       - VERSION=docker
       - TZ=Europe/London
     volumes:
-      - /volume1/config/plex:/config
-      - /volume1/tv:/tv
-      - /volume1/movies:/movies
-      - /volume1/music:/music
-      - /volume1/config/plex/transcode:/transcode
+      - /mnt/storage/config/plex:/config
+      - /mnt/storage/tv:/tv
+      - /mnt/storage/movies:/movies
+      - /mnt/storage/music:/music
+      - /mnt/storage/config/plex/transcode:/transcode
     restart: unless-stopped
 
   sonarr:
@@ -26,9 +26,9 @@ services:
       - PGID=101
       - TZ=Europe/London
     volumes:
-      - /volume1/config/sonarr:/config
-      - /volume1/tv:/tv
-      - /volume1/downloads:/downloads
+      - /mnt/storage/config/sonarr:/config
+      - /mnt/storage/tv:/tv
+      - /mnt/storage/downloads:/downloads
     ports:
       - 32784:8989
     restart: unless-stopped
@@ -43,9 +43,9 @@ services:
       - PGID=101
       - TZ=Europe/London
     volumes:
-      - /volume1/config/radarr:/config
-      - /volume1/movies:/movies
-      - /volume1/downloads:/downloads
+      - /mnt/storage/config/radarr:/config
+      - /mnt/storage/movies:/movies
+      - /mnt/storage/downloads:/downloads
     ports:
       - 32783:7878
     restart: unless-stopped
@@ -60,9 +60,9 @@ services:
       - PGID=101
       - TZ=Europe/London
     volumes:
-      - /volume1/config/sabnzbd:/config
-      - /volume1/downloads:/downloads
-      - /volume1/downloads/incomplete:/incomplete-downloads #optional
+      - /mnt/storage/config/sabnzbd:/config
+      - /mnt/storage/downloads:/downloads
+      - /mnt/storage/downloads/incomplete:/incomplete-downloads #optional
     ports:
       - 32781:8080
       - 32782:9090
@@ -79,8 +79,8 @@ services:
       - TZ=Europe/London
       - DELUGE_LOGLEVEL=error #optional
     volumes:
-      - /volume1/config/deluge:/config
-      - /volume1/downloads:/downloads
+      - /mnt/storage/config/deluge:/config
+      - /mnt/storage/downloads:/downloads
     ports:
       - 32789:8112
       - 6881:6881
@@ -97,9 +97,9 @@ services:
       - PGID=101
       - TZ=Europe/London
     volumes:
-      - /volume1/config/lidarr:/config
-      - /volume1/music:/music
-      - /volume1/downloads:/downloads
+      - /mnt/storage/config/lidarr:/config
+      - /mnt/storage/music:/music
+      - /mnt/storage/downloads:/downloads
     ports:
       - 32786:8686
     restart: unless-stopped
@@ -114,7 +114,7 @@ services:
       - PGID=101
       - TZ=Europe/London
     volumes:
-      - /volume1/config/prowlarr:/config
+      - /mnt/storage/config/prowlarr:/config
     ports:
       - 32787:9696
     restart: unless-stopped
@@ -130,6 +130,31 @@ services:
     command: -s
     networks:
       home:
+
+  netdata:
+    image: netdata/netdata
+    container_name: netdata
+    environment:
+      - PUID=1026
+      - PGID=101
+      - TZ=Europe/London
+    network_mode: host
+    restart: unless-stopped
+    cap_add:
+      - SYS_PTRACE
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - /mnt/storage/config/netdata/config:/etc/netdata
+      - /mnt/storage/config/netdata/data:/var/lib/netdata
+      - /mnt/storage/config/netdata/cache:/var/cache/netdata
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/VERSION:/host/etc/os-release:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
 networks:
   home:
