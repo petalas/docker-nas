@@ -11,11 +11,11 @@ services:
       - VERSION=docker
       - TZ=Europe/London
     volumes:
-      - /volume1/config/plex:/config
+      - ./config/plex:/config
       - /volume1/tv:/tv
       - /volume1/movies:/movies
       - /volume1/music:/music
-      - /volume1/config/plex/transcode:/transcode
+      - ./config/plex/transcode:/transcode
     restart: unless-stopped
 
   sonarr:
@@ -26,7 +26,7 @@ services:
       - PGID=101
       - TZ=Europe/London
     volumes:
-      - /volume1/config/sonarr:/config
+      - ./config/sonarr:/config
       - /volume1/tv:/tv
       - /volume1/downloads:/downloads
     ports:
@@ -43,7 +43,7 @@ services:
       - PGID=101
       - TZ=Europe/London
     volumes:
-      - /volume1/config/radarr:/config
+      - ./config/radarr:/config
       - /volume1/movies:/movies
       - /volume1/downloads:/downloads
     ports:
@@ -60,7 +60,7 @@ services:
       - PGID=101
       - TZ=Europe/London
     volumes:
-      - /volume1/config/sabnzbd:/config
+      - ./config/sabnzbd:/config
       - /volume1/downloads:/downloads
       - /volume1/downloads/incomplete:/incomplete-downloads #optional
     ports:
@@ -79,7 +79,7 @@ services:
       - TZ=Europe/London
       - DELUGE_LOGLEVEL=error #optional
     volumes:
-      - /volume1/config/deluge:/config
+      - ./config/deluge:/config
       - /volume1/downloads:/downloads
     ports:
       - 32789:8112
@@ -97,7 +97,7 @@ services:
       - PGID=101
       - TZ=Europe/London
     volumes:
-      - /volume1/config/lidarr:/config
+      - ./config/lidarr:/config
       - /volume1/music:/music
       - /volume1/downloads:/downloads
     ports:
@@ -114,7 +114,7 @@ services:
       - PGID=101
       - TZ=Europe/London
     volumes:
-      - /volume1/config/prowlarr:/config
+      - ./config/prowlarr:/config
     ports:
       - 32787:9696
     restart: unless-stopped
@@ -130,6 +130,31 @@ services:
     command: -s
     networks:
       home:
+
+  netdata:
+    image: netdata/netdata
+    container_name: netdata
+    environment:
+      - PUID=1026
+      - PGID=101
+      - TZ=Europe/London
+    network_mode: host
+    restart: unless-stopped
+    cap_add:
+      - SYS_PTRACE
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - ./config/netdata/config:/etc/netdata
+      - ./config/netdata/data:/var/lib/netdata
+      - ./config/netdata/cache:/var/cache/netdata
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/VERSION:/host/etc/os-release:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
 networks:
   home:
