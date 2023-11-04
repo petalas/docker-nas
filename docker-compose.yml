@@ -131,6 +131,31 @@ services:
     networks:
       home:
 
+  netdata:
+    image: netdata/netdata
+    container_name: netdata
+    environment:
+      - PUID=1026
+      - PGID=101
+      - TZ=Europe/London
+    network_mode: host
+    restart: unless-stopped
+    cap_add:
+      - SYS_PTRACE
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - /volume1/config/netdata/config:/etc/netdata
+      - /volume1/config/netdata/data:/var/lib/netdata
+      - /volume1/config/netdata/cache:/var/cache/netdata
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/VERSION:/host/etc/os-release:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
 networks:
   home:
     driver: bridge
