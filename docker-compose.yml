@@ -6,8 +6,8 @@ services:
     container_name: plex
     network_mode: host
     environment:
-      - PUID=1026
-      - PGID=101
+      - PUID=1000
+      - PGID=1000
       - VERSION=docker
       - TZ=Europe/London
     volumes:
@@ -22,8 +22,8 @@ services:
     image: linuxserver/sonarr
     container_name: sonarr
     environment:
-      - PUID=1026
-      - PGID=101
+      - PUID=1000
+      - PGID=1000
       - TZ=Europe/London
     volumes:
       - /mnt/storage/config/sonarr:/config
@@ -39,8 +39,8 @@ services:
     image: linuxserver/radarr
     container_name: radarr
     environment:
-      - PUID=1026
-      - PGID=101
+      - PUID=1000
+      - PGID=1000
       - TZ=Europe/London
     volumes:
       - /mnt/storage/config/radarr:/config
@@ -56,8 +56,8 @@ services:
     image: linuxserver/sabnzbd
     container_name: sabnzbd
     environment:
-      - PUID=1026
-      - PGID=101
+      - PUID=1000
+      - PGID=1000
       - TZ=Europe/London
     volumes:
       - /mnt/storage/config/sabnzbd:/config
@@ -74,8 +74,8 @@ services:
     image: linuxserver/deluge
     container_name: deluge
     environment:
-      - PUID=1026
-      - PGID=101
+      - PUID=1000
+      - PGID=1000
       - TZ=Europe/London
       - DELUGE_LOGLEVEL=error #optional
     volumes:
@@ -93,8 +93,8 @@ services:
     image: linuxserver/lidarr
     container_name: lidarr
     environment:
-      - PUID=1026
-      - PGID=101
+      - PUID=1000
+      - PGID=1000
       - TZ=Europe/London
     volumes:
       - /mnt/storage/config/lidarr:/config
@@ -110,8 +110,8 @@ services:
     image: linuxserver/prowlarr:develop
     container_name: prowlarr
     environment:
-      - PUID=1026
-      - PGID=101
+      - PUID=1000
+      - PGID=1000
       - TZ=Europe/London
     volumes:
       - /mnt/storage/config/prowlarr:/config
@@ -135,8 +135,8 @@ services:
     image: netdata/netdata
     container_name: netdata
     environment:
-      - PUID=1026
-      - PGID=101
+      - PUID=1000
+      - PGID=1000
       - TZ=Europe/London
     network_mode: host
     restart: unless-stopped
