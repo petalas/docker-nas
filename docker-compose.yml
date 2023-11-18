@@ -156,6 +156,17 @@ services:
       - /etc/VERSION:/host/etc/os-release:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
+  recyclarr:
+    image: ghcr.io/recyclarr/recyclarr
+    container_name: recyclarr
+    user: 1000:1000
+    networks:
+      home:
+    volumes:
+      - /mnt/storage/config/recyclarr:/config
+    environment:
+      - TZ=Europe/London
+
 networks:
   home:
     driver: bridge
