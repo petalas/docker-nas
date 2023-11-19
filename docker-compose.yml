@@ -11,11 +11,11 @@ services:
       - VERSION=docker
       - TZ=Europe/London
     volumes:
-      - /mnt/storage/config/plex:/config
+      - ./config/plex:/config
+      - ./config/plex/transcode:/transcode
       - /mnt/storage/tv:/tv
       - /mnt/storage/movies:/movies
       - /mnt/storage/music:/music
-      - /mnt/storage/config/plex/transcode:/transcode
     restart: unless-stopped
 
   sonarr:
@@ -26,7 +26,7 @@ services:
       - PGID=1000
       - TZ=Europe/London
     volumes:
-      - /mnt/storage/config/sonarr:/config
+      - ./config/sonarr:/config
       - /mnt/storage/:/data
     ports:
       - 32784:8989
@@ -42,7 +42,7 @@ services:
       - PGID=1000
       - TZ=Europe/London
     volumes:
-      - /mnt/storage/config/radarr:/config
+      - ./config/radarr:/config
       - /mnt/storage/:/data
     ports:
       - 32783:7878
@@ -58,7 +58,7 @@ services:
       - PGID=1000
       - TZ=Europe/London
     volumes:
-      - /mnt/storage/config/sabnzbd:/config
+      - ./config/sabnzbd:/config
       - /mnt/storage:/data
     ports:
       - 32781:8080
@@ -76,7 +76,7 @@ services:
       - TZ=Europe/London
       - DELUGE_LOGLEVEL=error #optional
     volumes:
-      - /mnt/storage/config/deluge:/config
+      - ./config/deluge:/config
       - /mnt/storage:/data
     ports:
       - 32789:8112
@@ -94,7 +94,7 @@ services:
       - PGID=1000
       - TZ=Europe/London
     volumes:
-      - /mnt/storage/config/lidarr:/config
+      - ./config/lidarr:/config
       - /mnt/storage:/data
     ports:
       - 32786:8686
@@ -110,7 +110,7 @@ services:
       - PGID=1000
       - TZ=Europe/London
     volumes:
-      - /mnt/storage/config/prowlarr:/config
+      - ./config/prowlarr:/config
     ports:
       - 32787:9696
     restart: unless-stopped
@@ -142,9 +142,9 @@ services:
     security_opt:
       - apparmor:unconfined
     volumes:
-      - /mnt/storage/config/netdata/config:/etc/netdata
-      - /mnt/storage/config/netdata/data:/var/lib/netdata
-      - /mnt/storage/config/netdata/cache:/var/cache/netdata
+      - ./config/netdata/config:/etc/netdata
+      - ./config/netdata/data:/var/lib/netdata
+      - ./config/netdata/cache:/var/cache/netdata
       - /etc/passwd:/host/etc/passwd:ro
       - /etc/group:/host/etc/group:ro
       - /proc:/host/proc:ro
@@ -159,7 +159,7 @@ services:
     networks:
       home:
     volumes:
-      - /mnt/storage/config/recyclarr:/config
+      - ./config/recyclarr:/config
     environment:
       - TZ=Europe/London
 
