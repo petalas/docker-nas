@@ -27,8 +27,7 @@ services:
       - TZ=Europe/London
     volumes:
       - /mnt/storage/config/sonarr:/config
-      - /mnt/storage/tv:/tv
-      - /mnt/storage/downloads:/downloads
+      - /mnt/storage/:/data
     ports:
       - 32784:8989
     restart: unless-stopped
@@ -44,8 +43,7 @@ services:
       - TZ=Europe/London
     volumes:
       - /mnt/storage/config/radarr:/config
-      - /mnt/storage/movies:/movies
-      - /mnt/storage/downloads:/downloads
+      - /mnt/storage/:/data
     ports:
       - 32783:7878
     restart: unless-stopped
@@ -61,8 +59,7 @@ services:
       - TZ=Europe/London
     volumes:
       - /mnt/storage/config/sabnzbd:/config
-      - /mnt/storage/downloads:/downloads
-      - /mnt/storage/downloads/incomplete:/incomplete-downloads #optional
+      - /mnt/storage:/data
     ports:
       - 32781:8080
       - 32782:9090
@@ -80,7 +77,7 @@ services:
       - DELUGE_LOGLEVEL=error #optional
     volumes:
       - /mnt/storage/config/deluge:/config
-      - /mnt/storage/downloads:/downloads
+      - /mnt/storage:/data
     ports:
       - 32789:8112
       - 6881:6881
@@ -98,8 +95,7 @@ services:
       - TZ=Europe/London
     volumes:
       - /mnt/storage/config/lidarr:/config
-      - /mnt/storage/music:/music
-      - /mnt/storage/downloads:/downloads
+      - /mnt/storage:/data
     ports:
       - 32786:8686
     restart: unless-stopped
