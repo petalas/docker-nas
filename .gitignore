@@ -1,1 +1,5 @@
-config/
+config/*
+!config/recyclarr
+
+config/recyclarr/*
+!config/recyclarr/recyclarr.yml
