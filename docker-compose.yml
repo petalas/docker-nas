@@ -66,25 +66,24 @@ services:
     restart: unless-stopped
     networks:
       home:
-  
-  deluge:
-    image: linuxserver/deluge
-    container_name: deluge
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/London
-      - DELUGE_LOGLEVEL=error #optional
+      - WEBUI_PORT=8080
+      - DOCKER_MODS=ghcr.io/themepark-dev/theme.park:qbittorrent
     volumes:
-      - ./config/deluge:/config
+      - ./config/qbittorrent:/config
       - /mnt/storage:/data
     ports:
-      - 32789:8112
+      - 8080:8080
       - 6881:6881
       - 6881:6881/udp
     restart: unless-stopped
-    networks:
-      home:
 
   lidarr:
     image: linuxserver/lidarr
