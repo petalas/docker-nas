@@ -1,5 +1,9 @@
 config/*
-!config/recyclarr
 
+!config/recyclarr
 config/recyclarr/*
 !config/recyclarr/recyclarr.yml
+
+!config/cross-seed
+config/cross-seed/*
+!config/cross-seed/config.js
