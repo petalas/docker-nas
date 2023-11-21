@@ -1,20 +1,23 @@
 "use strict";
 // If you find yourself always using the same command-line flag, you can set
 // it here as a default.
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, "__esModule", {value: true});
 module.exports = {
     /**
      * Pause at least this much in between each search. Higher is safer.
      * It is not recommended to set this to less than 2 seconds.
      */
-    delay: 3,
+    delay: 2,
     /**
      * List of Torznab URLs.
      * For Jackett, click "Copy RSS feed"
      * For Prowlarr, click on the indexer name and copy the Torznab Url, then append "?apikey=YOUR_PROWLARR_API_KEY"
      * Wrap each URL in quotation marks, and separate them with commas, and surround the entire set in brackets.
      */
-    torznab: ["http://192.168.1.102:32787/12/api?apikey=4c241bd2e6e84f54bc02df1544eadd06"],
+    torznab: [
+        "http://192.168.1.102:32787/12/api?apikey=4c241bd2e6e84f54bc02df1544eadd06",
+        "http://192.168.1.102:32787/13/api?apikey=4c241bd2e6e84f54bc02df1544eadd06"
+    ],
     /**
      * To search with downloaded data, you can pass in directories to your downloaded torrent
      * data to find matches rather using the torrent files themselves for matching.
