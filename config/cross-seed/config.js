@@ -15,8 +15,8 @@ module.exports = {
      * Wrap each URL in quotation marks, and separate them with commas, and surround the entire set in brackets.
      */
     torznab: [
-        "http://192.168.1.102:32787/12/api?apikey=4c241bd2e6e84f54bc02df1544eadd06",
-        "http://192.168.1.102:32787/13/api?apikey=4c241bd2e6e84f54bc02df1544eadd06"
+        "http://prowlarr:9696/12/api?apikey=4c241bd2e6e84f54bc02df1544eadd06",
+        "http://prowlarr:9696/13/api?apikey=4c241bd2e6e84f54bc02df1544eadd06"
     ],
     /**
      * To search with downloaded data, you can pass in directories to your downloaded torrent
@@ -85,7 +85,7 @@ module.exports = {
     /**
      * Whether to search for all episode torrents, including those from season packs. This option overrides includeSingleEpisodes.
      */
-    includeEpisodes: false,
+    includeEpisodes: true,
     /**
      * Whether to include single episode torrents in the search (not from season packs).
      * Like `includeEpisodes` but slightly more restrictive.
@@ -141,7 +141,7 @@ module.exports = {
      * Supply your username and password inside the url like so:
      * "http://username:password@localhost:8080"
      */
-    qbittorrentUrl: undefined,
+    qbittorrentUrl: "http://admin:adminadmin@qbittorrent:8080/",
     /**
      * The url of your Transmission RPC interface.
      * Usually ends with "/transmission/rpc".
@@ -157,7 +157,7 @@ module.exports = {
      * Supply your WebUI password as well
      * "http://:password@localhost:8112/json"
      */
-    delugeRpcUrl: "http://:deluge@192.168.1.102:32789/json",
+    delugeRpcUrl: undefined,
     /**
      * qBittorrent and Deluge specific
      * Whether to inject using the same labels/categories as the original torrent.

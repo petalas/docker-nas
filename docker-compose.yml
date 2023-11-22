@@ -27,6 +27,7 @@ services:
       - TZ=Europe/London
     volumes:
       - ./config/sonarr:/config
+      - ./scripts:/scripts:ro
       - /mnt/storage/:/data
     ports:
       - 32784:8989
@@ -43,6 +44,7 @@ services:
       - TZ=Europe/London
     volumes:
       - ./config/radarr:/config
+      - ./scripts:/scripts:ro
       - /mnt/storage/:/data
     ports:
       - 32783:7878
@@ -84,6 +86,8 @@ services:
       - 6881:6881
       - 6881:6881/udp
     restart: unless-stopped
+    networks:
+      home:
 
   lidarr:
     image: linuxserver/lidarr
@@ -155,12 +159,13 @@ services:
     image: ghcr.io/recyclarr/recyclarr
     container_name: recyclarr
     user: 1000:1000
-    networks:
-      home:
     volumes:
       - ./config/recyclarr:/config
     environment:
       - TZ=Europe/London
+    restart: unless-stopped
+    networks:
+      home:
 
   cross-seed:
       image: crossseed/cross-seed
@@ -168,10 +173,13 @@ services:
       user: 1000:1000 # optional but recommended
       volumes:
         - ./config/cross-seed:/config
-        - ./config/deluge/state:/torrents:ro # note that this volume can and should be mounted read-only
+        - ./config/qbittorrent/qBittorrent/BT_backup:/torrents:ro # note that this volume can and should be mounted read-only
         - /mnt/storage/cross-seeds:/cross-seeds
         - /mnt/storage:/data # this is optional dataDir path (for data-based matching) - will need to mirror your torrent client's path (like Arr's do)
-      command: search
+      command: daemon
+      restart: unless-stopped
+      networks:
+        home:
 
 networks:
   home:
