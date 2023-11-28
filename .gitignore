@@ -7,3 +7,8 @@ config/recyclarr/*
 !config/cross-seed
 config/cross-seed/*
 !config/cross-seed/config.js
+
+!config/qbit_manage
+config/qbit_manage/*
+!config/qbit_manage/config.yml
+
