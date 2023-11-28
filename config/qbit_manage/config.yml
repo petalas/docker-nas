@@ -63,7 +63,7 @@ tracker:
 nohardlinks:
 - movies
 - tv
-- music
+# - music
 
 # FIXME
 share_limits:
