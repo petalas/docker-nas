@@ -35,6 +35,7 @@ services:
     networks:
       home:
 
+
   radarr:
     image: linuxserver/radarr
     container_name: radarr
@@ -52,6 +53,7 @@ services:
     networks:
       home:
 
+
   sabnzbd:
     image: linuxserver/sabnzbd
     container_name: sabnzbd
@@ -68,6 +70,7 @@ services:
     restart: unless-stopped
     networks:
       home:
+
 
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:4.6.0-r0-ls296
@@ -89,6 +92,7 @@ services:
     networks:
       home:
 
+
   lidarr:
     image: linuxserver/lidarr
     container_name: lidarr
@@ -105,6 +109,7 @@ services:
     networks:
       home:
 
+
   prowlarr:
     image: linuxserver/prowlarr:develop
     container_name: prowlarr
@@ -120,6 +125,7 @@ services:
     networks:
       home:
 
+
   iperf3:
     image: networkstatic/iperf3
     container_name: iperf3
@@ -129,6 +135,7 @@ services:
     command: -s
     networks:
       home:
+
 
   netdata:
     image: netdata/netdata
@@ -167,15 +174,16 @@ services:
     networks:
       home:
 
+
   autobrr:
     image: ghcr.io/autobrr/autobrr:latest
     container_name: autobrr
     restart: unless-stopped
     logging:
-     driver: json-file
-     options:
-       max-file: "1"
-       max-size: "10M"
+      driver: json-file
+      options:
+        max-file: "1"
+        max-size: "10M"
     user: 1000:1000
     environment:
       - TZ=Europe/London
@@ -184,22 +192,23 @@ services:
     ports:
       - 7474:7474
     networks:
-        home:
+      home:
 
 
   cross-seed:
-      image: crossseed/cross-seed
-      container_name: cross-seed
-      user: 1000:1000 # optional but recommended
-      volumes:
-        - ./config/cross-seed:/config
-        - ./config/qbittorrent/qBittorrent/BT_backup:/torrents:ro # note that this volume can and should be mounted read-only
-        - /mnt/storage:/data # this is optional dataDir path (for data-based matching) - will need to mirror your torrent client's path (like Arr's do)
-        - /mnt/storage/cross-seeds:/cross-seeds
-      command: daemon
-      restart: unless-stopped
-      networks:
-        home:
+    image: crossseed/cross-seed
+    container_name: cross-seed
+    user: 1000:1000 # optional but recommended
+    volumes:
+      - ./config/cross-seed:/config
+      - ./config/qbittorrent/qBittorrent/BT_backup:/torrents:ro # note that this volume can and should be mounted read-only
+      - /mnt/storage:/data # this is optional dataDir path (for data-based matching) - will need to mirror your torrent client's path (like Arr's do)
+      - /mnt/storage/cross-seeds:/cross-seeds
+    command: daemon
+    restart: unless-stopped
+    networks:
+      home:
+
 
   qbit_manage:
     container_name: qbit_manage
@@ -231,6 +240,23 @@ services:
     restart: unless-stopped
     networks:
       home:
+
+
+  flaresolverr:
+    # DockerHub mirror flaresolverr/flaresolverr:latest
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    environment:
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - LOG_HTML=${LOG_HTML:-false}
+      - CAPTCHA_SOLVER=${CAPTCHA_SOLVER:-none}
+      - TZ=Europe/London
+    ports:
+      - 8191:8191
+    restart: unless-stopped
+    networks:
+      home:
+
 
 networks:
   home:
