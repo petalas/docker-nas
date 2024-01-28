@@ -188,9 +188,21 @@ services:
     environment:
       - TZ=Europe/London
     volumes:
-      - ./config/autobrr/config:/config
+      - ./config/autobrr:/config
     ports:
       - 7474:7474
+    networks:
+      home:
+
+
+  omegabrr:
+    container_name: omegabrr
+    image: ghcr.io/autobrr/omegabrr:latest
+    ports:
+      - "7441:7441"
+    user: 1000:1000
+    volumes:
+      - "./config/omegabrr:/config"
     networks:
       home:
 

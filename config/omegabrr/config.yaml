@@ -1,0 +1,99 @@
+# config.yaml
+---
+server:
+  host: 0.0.0.0
+  port: 7441
+  apiToken: 20f421e1624c956129ab58829f8d297e
+schedule: 0 */6 * * *
+
+clients:
+  autobrr:
+   host: http://autobrr:7474
+   apikey: 731133e4410cb379a1eb43b72e00c796
+
+  arr:
+    - name: radarr4K
+      type: radarr
+      host: http://radarr:7878
+      apikey: d30fce367a614173b0b01d9421ee91bc
+      filters:
+        - 4
+
+    - name: sonarr4K
+      type: sonarr
+      host: http://sonarr:8989
+      apikey: 8f3831c640644bc990613927c943f1b1
+      filters:
+        - 5
+     #excludeAlternateTitles: true # defaults to false
+
+    #- name: readarr
+    #  type: readarr
+    #  host: http://localhost:8787
+    #  apikey: API_KEY
+    #  filters:
+    #    - 18 # Change me
+
+    #- name: lidarr
+    #  type: lidarr
+    #  host: http://localhost:8686
+    #  apikey: API_KEY
+    #  filters:
+    #    - 32 # Change me
+
+    #- name: whisparr
+    #  type: whisparr
+    #  host: http://localhost:6969
+    #  apikey: API_KEY
+    #  matchRelease: true
+    #  filters:
+    #    - 69 # Change me
+
+lists:
+  #- name: Latest TV Shows
+  #  type: mdblist
+  #  url: https://mdblist.com/lists/garycrawfordgc/latest-tv-shows/json
+  #  filters:
+  #    - 1 # Change me
+
+  #- name: Anticipated TV
+  #  type: trakt
+  #  url: https://api.autobrr.com/lists/trakt/anticipated-tv
+  #  filters:
+  #    - 22 # Change me
+
+  #- name: Upcoming Movies
+  #  type: trakt
+  #  url: https://api.autobrr.com/lists/trakt/upcoming-movies
+  #  filters:
+  #    - 21 # Change me
+
+  #- name: Upcoming Bluray
+  #  type: trakt
+  #  url: https://api.autobrr.com/lists/trakt/upcoming-bluray
+  #  filters:
+  #    - 24 # Change me
+
+  #- name: Popular TV
+  #  type: trakt
+  #  url: https://api.autobrr.com/lists/trakt/popular-tv
+  #  filters:
+  #    - 25 # Change me
+
+  #- name: StevenLu
+  #  type: trakt
+  #  url: https://api.autobrr.com/lists/stevenlu
+  #  filters:
+  #    - 23 # Change me
+
+  #- name: New Albums
+  #  type: metacritic
+  #  url: https://api.autobrr.com/lists/metacritic/new-albums
+  #  filters:
+  #    - 9 # Change me
+
+  #- name: Upcoming Albums
+  #  type: metacritic
+  #  url: https://api.autobrr.com/lists/metacritic/upcoming-albums
+  #  filters:
+  #    - 20 # Change me
