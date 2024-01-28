@@ -41,7 +41,7 @@ cat:
   movies: /data/torrents/movies
   tv: /data/torrents/tv
   music: /data/torrents/music
-
+  torrents: /data/torrents/
 tracker:
   # Mandatory
   # Tag Parameters
