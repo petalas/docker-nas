@@ -8,10 +8,17 @@ schedule: 0 */6 * * *
 
 clients:
   autobrr:
-   host: http://autobrr:7474
-   apikey: 731133e4410cb379a1eb43b72e00c796
+    host: http://autobrr:7474
+    apikey: 731133e4410cb379a1eb43b72e00c796
 
   arr:
+    - name: radarr
+      type: radarr
+      host: http://radarr:7878
+      apikey: d30fce367a614173b0b01d9421ee91bc
+      filters:
+        - 2
+
     - name: radarr4K
       type: radarr
       host: http://radarr:7878
@@ -24,30 +31,21 @@ clients:
       host: http://sonarr:8989
       apikey: 8f3831c640644bc990613927c943f1b1
       filters:
+        - 3
+
+    - name: sonarr4K
+      type: sonarr
+      host: http://sonarr:8989
+      apikey: 8f3831c640644bc990613927c943f1b1
+      filters:
         - 5
-     #excludeAlternateTitles: true # defaults to false
 
-    #- name: readarr
-    #  type: readarr
-    #  host: http://localhost:8787
-    #  apikey: API_KEY
-    #  filters:
-    #    - 18 # Change me
-
-    #- name: lidarr
-    #  type: lidarr
-    #  host: http://localhost:8686
-    #  apikey: API_KEY
-    #  filters:
-    #    - 32 # Change me
-
-    #- name: whisparr
-    #  type: whisparr
-    #  host: http://localhost:6969
-    #  apikey: API_KEY
-    #  matchRelease: true
-    #  filters:
-    #    - 69 # Change me
+    - name: lidarr
+      type: lidarr
+      host: http://lidarr:8686
+      apikey: 1db822b651e349b8a99661a926e01cad
+      filters:
+        - 6
 
 lists:
   #- name: Latest TV Shows
