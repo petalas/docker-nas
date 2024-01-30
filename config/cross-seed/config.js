@@ -15,8 +15,10 @@ module.exports = {
      * Wrap each URL in quotation marks, and separate them with commas, and surround the entire set in brackets.
      */
     torznab: [
-        "http://prowlarr:9696/12/api?apikey=4c241bd2e6e84f54bc02df1544eadd06",
-        "http://prowlarr:9696/13/api?apikey=4c241bd2e6e84f54bc02df1544eadd06"
+        "http://prowlarr:9696/12/api?apikey=4c241bd2e6e84f54bc02df1544eadd06", // HD-Torrents
+        "http://prowlarr:9696/13/api?apikey=4c241bd2e6e84f54bc02df1544eadd06", // FearNoPeer
+        "http://prowlarr:9696/14/api?apikey=4c241bd2e6e84f54bc02df1544eadd06", // DigitalCore
+        "http://prowlarr:9696/14/api?apikey=4c241bd2e6e84f54bc02df1544eadd06", // Milkie
     ],
     /**
      * To search with downloaded data, you can pass in directories to your downloaded torrent
@@ -29,7 +31,7 @@ module.exports = {
      * 		dataDirs: ["/path/here", "/other/path/here"],
      * 		dataDirs: ["C:\\My Data\\Downloads"]
      */
-    dataDirs: ["/data/torrents", "/data/movies"],
+    dataDirs: ["/data/torrents", "/data/movies", "/data/tv", "/data/music"],
     /**
      * Determines flexibility of naming during matching. "safe" will allow only perfect name matches
      * using the standard matching algorithm. "risky" uses filesize as its only comparison point.
