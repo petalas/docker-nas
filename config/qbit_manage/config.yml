@@ -30,11 +30,10 @@ directory:
   # <OPTIONAL> torrents_dir var: </your/path/here/>  # Path of the your qbittorrent torrents directory. Required for `save_torrents` attribute in recyclebin
   # <OPTIONAL> orphaned_dir var: </your/path/here/>  # Path of the the Orphaned Data folder. This is similar to RecycleBin, but only for orphaned data.
   cross_seed: /data/cross-seeds
-  root_dir: /data/
-  remote_dir: /data/
+  root_dir: /data/torrents
   recycle_bin: /data/.RecycleBin
   torrents_dir: /data/torrents/torrent-files
-
+  remote_dir: /data/torrents/
 cat:
   # Category & Path Parameters
   # <Category Name> : <save_path>  # Path of your save directory.
