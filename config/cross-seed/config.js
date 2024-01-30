@@ -208,7 +208,7 @@ module.exports = {
      * "2w"
      * "3 days"
      */
-    searchCadence: undefined,
+    searchCadence: "2w",
     /**
      * Fail snatch requests that haven't responded after this long.
      * Set to null for an infinite timeout.
