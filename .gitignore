@@ -12,6 +12,12 @@ config/cross-seed/*
 config/qbit_manage/*
 !config/qbit_manage/config.yml
 
+!config/autobrr
+config/autobrr/*
+!config/autobrr/config.toml
+!config/autobrr/definitions
+!config/autobrr/definitions/*
+
 !config/omegabrr
 config/omegabrr/*
 !config/omegabrr/config.yaml
