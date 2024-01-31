@@ -115,8 +115,8 @@ services:
       - /mnt/storage:/data
     ports:
       - 8080:8080
-      - 6881:6881
-      - 6881:6881/udp
+      - 16881:16881
+      - 16881:16881/udp
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8080 || exit 1"]
