@@ -155,6 +155,34 @@ services:
     networks:
       home:
 
+  readarr:
+    image: lscr.io/linuxserver/readarr:develop
+    container_name: readarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - ./config/readarr:/config
+      - /mnt/storage:/data
+    ports:
+      - 8787:8787
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8787/readarr/ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    depends_on:
+      qbittorrent:
+        condition: service_healthy
+      sabnzbd:
+        condition: service_healthy
+      prowlarr:
+        condition: service_healthy
+    networks:
+      home:
+
 
   prowlarr:
     image: linuxserver/prowlarr:develop
@@ -259,6 +287,8 @@ services:
         condition: service_healthy
       lidarr:
         condition: service_healthy
+      readarr:
+        condition: service_healthy
     networks:
       home:
 
@@ -272,7 +302,7 @@ services:
     volumes:
       - "./config/omegabrr:/config"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:7441"]
+      test: ["CMD-SHELL", "curl -f https://icanhazip.com/ || exit 1"]
       interval: 10s
       timeout: 3s
       retries: 5
@@ -286,6 +316,8 @@ services:
       sonarr:
         condition: service_healthy
       lidarr:
+        condition: service_healthy
+      readarr:
         condition: service_healthy
     networks:
       home:
