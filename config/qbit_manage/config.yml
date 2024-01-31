@@ -3,7 +3,6 @@
 # Please refer to the link below for more details on how to set up the configuration file
 # https://github.com/StuffAnThings/qbit_manage/wiki/Config-Setup
 
-
 qbt:
   # qBittorrent parameters
   host: qbittorrent:8080
@@ -16,9 +15,9 @@ settings:
   nohardlinks_tag: noHL # Will set the tag of any torrents with no hardlinks.
   share_limits_tag: ~share_limit # Will add this tag when applying share limits to provide an easy way to filter torrents by share limit group/priority for each torrent
   ignoreTags_OnUpdate: # When running tag-update function, it will update torrent tags for a given torrent even if the torrent has at least one or more of the tags defined here. Otherwise torrents will not be tagged if tags exist.
-  - noHL
-  - issue
-  - cross-seed
+    - noHL
+    - issue
+    - cross-seed
 directory:
   # Do not remove these
   # Cross-seed var: </your/path/here/>  # Output directory of cross-seed
@@ -57,14 +56,18 @@ tracker:
     tag: HDT
   digitalcore:
     tag: DC
+  myanonamouse:
+    tag: MAM
+  milkie:
+    tag: MLK
   # The "other" key is a special keyword and if defined will tag any other trackers that don't match the above trackers into this tag
   other:
     tag: other
 
 nohardlinks:
-- movies
-- tv
-# - music
+  - movies
+  - tv
+  - music
 
 # FIXME
 share_limits:
@@ -78,26 +81,26 @@ share_limits:
     # <OPTIONAL> include_all_tags: <list> # Filter the group based on one or more tags. Multiple include_all_tags are checked with an AND condition
     # All tags defined here must be present in the torrent for it to be included in this group
     include_all_tags:
-    - noHL
+      - noHL
     # <OPTIONAL> include_any_tags: <list> # Filter the group based on one or more tags. Multiple include_any_tags are checked with an OR condition
     # Any tags defined here must be present in the torrent for it to be included in this group
     include_any_tags:
-    - noHL
+      - noHL
     # <OPTIONAL> exclude_all_tags: <list> # Filter by excluding one or more tags. Multiple exclude_all_tags are checked with an AND condition
     # This is useful to combine with the category filter to exclude one or more tags from an entire category
     # All tags defined here must be present in the torrent for it to be excluded in this group
     exclude_all_tags:
-    - Beyond-HD
+      - Beyond-HD
     # <OPTIONAL> exclude_any_tags: <list> # Filter by excluding one or more tags. Multiple exclude_any_tags are checked with an OR condition
     # This is useful to combine with the category filter to exclude one or more tags from an entire category
     # Any tags defined here must be present in the torrent for it to be excluded in this group
     exclude_any_tags:
-    - Beyond-HD
+      - Beyond-HD
     # <OPTIONAL> categories: <list> # Filter by including one or more categories. Multiple categories are checked with an OR condition
     # Since one torrent can only be associated with a single category, multiple categories are checked with an OR condition
     categories:
-    - RadarrComplete
-    - SonarrComplete
+      - RadarrComplete
+      - SonarrComplete
     # <OPTIONAL> max_ratio <float>: Will set the torrent Maximum share ratio until torrent is stopped from seeding/uploading.
     # Will default to -1 (no limit) if not specified for the group.
     max_ratio: 5.0
@@ -128,13 +131,13 @@ share_limits:
   cross-seed:
     priority: 2
     include_all_tags:
-    - cross-seed
+      - cross-seed
     max_seeding_time: 10200
     cleanup: false
   PTP:
     priority: 3
     include_all_tags:
-    - PassThePopcorn
+      - PassThePopcorn
     max_ratio: 2.0
     max_seeding_time: 130000
     cleanup: false
@@ -170,12 +173,12 @@ orphaned:
   empty_after_x_days: 60
   # File patterns that will not be considered orphaned files. Handy for generated files that aren't part of the torrent but belong with the torrent's files
   exclude_patterns:
-  - '**/.DS_Store'
-  - '**/Thumbs.db'
-  - '**/@eaDir'
-  - /data/torrents/temp/**
-  - '**/*.!qB'
-  - '**/*_unpackerred'
+    - "**/.DS_Store"
+    - "**/Thumbs.db"
+    - "**/@eaDir"
+    - /data/torrents/temp/**
+    - "**/*.!qB"
+    - "**/*_unpackerred"
 webhooks:
   error:
   run_start:

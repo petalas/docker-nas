@@ -102,7 +102,7 @@ services:
 
 
   qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent:4.6.0-r0-ls296
+    image: lscr.io/linuxserver/qbittorrent:4.6.3-r0-ls308
     container_name: qbittorrent
     environment:
       - PUID=1000
@@ -353,7 +353,7 @@ services:
       - ./config/qbittorrent/qBittorrent/BT_backup:/qbittorrent/:ro
     environment:
       - QBT_RUN=false
-      - QBT_SCHEDULE=1
+      - QBT_SCHEDULE=5
       - QBT_CONFIG=config.yml
       - QBT_LOGFILE=activity.log
       - QBT_CROSS_SEED=false
@@ -370,6 +370,7 @@ services:
       - QBT_LOG_LEVEL=WARNING
       - QBT_DIVIDER==
       - QBT_WIDTH=100
+      - QBT_DEBUG=false
     restart: unless-stopped
     depends_on:
       qbittorrent:
