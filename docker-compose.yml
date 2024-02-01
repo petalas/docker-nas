@@ -1,42 +1,74 @@
-version: "2"
+version: "3.8"
+
+networks:
+  home:
+    driver: bridge
+
+x-env: &env
+  PUID: 1000
+  PGID: 1000
+  TZ: Europe/London
+
+x-healthcheck: &healthcheck
+      test: ["CMD-SHELL", "curl -f https://icanhazip.com/ || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+x-common: &common
+  environment:
+    <<: *env
+  restart: unless-stopped
+  healthcheck:
+      <<: *healthcheck
+  networks:
+      home:
+
 services:
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    <<: *common
+    healthcheck:
+      <<: *healthcheck
+      test: ["CMD-SHELL", "exit 0"] # TODO: figure out what kind of healthcheck we can do
+    ports:
+      - 3000:3000
+    volumes:
+      - ./config/homepage:/app/config 
+      - /var/run/docker.sock:/var/run/docker.sock
 
   plex:
     image: linuxserver/plex
     container_name: plex
     network_mode: host
     environment:
-      - PUID=1000
-      - PGID=1000
-      - VERSION=docker
-      - TZ=Europe/London
+      <<: *env
+      VERSION: docker
+    restart: unless-stopped
+    healthcheck:
+      <<: *healthcheck
+      test: ["CMD-SHELL", "curl -f https://plex.com/ || exit 1"]
     volumes:
       - ./config/plex:/config
       - ./config/plex/transcode:/transcode
       - /mnt/storage/tv:/tv
       - /mnt/storage/movies:/movies
       - /mnt/storage/music:/music
-    restart: unless-stopped
 
   sonarr:
     image: lscr.io/linuxserver/sonarr:develop
     container_name: sonarr
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/London
+    <<: *common
     volumes:
       - ./config/sonarr:/config
       - ./scripts:/scripts:ro
       - /mnt/storage/:/data
     ports:
       - 32784:8989
-    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8989/sonarr/ping"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
+      <<: *healthcheck
+      test: ["CMD-SHELL", "curl -f http://localhost:8989/sonarr/ping || exit 1"]
     depends_on:
       qbittorrent:
         condition: service_healthy
@@ -44,29 +76,21 @@ services:
         condition: service_healthy
       prowlarr:
         condition: service_healthy
-    networks:
-      home:
 
 
   radarr:
     image: linuxserver/radarr
     container_name: radarr
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/London
+    <<: *common
     volumes:
       - ./config/radarr:/config
       - ./scripts:/scripts:ro
       - /mnt/storage/:/data
     ports:
       - 32783:7878
-    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:7878/radarr/ping"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
+      <<: *healthcheck
+      test: ["CMD-SHELL", "curl -f http://localhost:7878/radarr/ping || exit 1"]
     depends_on:
       qbittorrent:
         condition: service_healthy
@@ -74,42 +98,31 @@ services:
         condition: service_healthy
       prowlarr:
         condition: service_healthy
-    networks:
-      home:
 
 
   sabnzbd:
     image: linuxserver/sabnzbd
     container_name: sabnzbd
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/London
+    <<: *common
     volumes:
       - ./config/sabnzbd:/config
       - /mnt/storage:/data
     ports:
       - 32781:8080
       - 32782:9090
-    restart: unless-stopped
     healthcheck:
+      <<: *healthcheck
       test: ["CMD-SHELL", "curl -f http://localhost:8080 || exit 1"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
-    networks:
-      home:
 
 
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:4.6.3-r0-ls308
     container_name: qbittorrent
+    <<: *common
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/London
-      - WEBUI_PORT=8080
-      - DOCKER_MODS=ghcr.io/themepark-dev/theme.park:qbittorrent
+      <<: *env
+      WEBUI_PORT: 8080
+      DOCKER_MODS: ghcr.io/themepark-dev/theme.park:qbittorrent
     volumes:
       - ./config/qbittorrent:/config
       - /mnt/storage:/data
@@ -117,34 +130,23 @@ services:
       - 8080:8080
       - 16881:16881
       - 16881:16881/udp
-    restart: unless-stopped
     healthcheck:
+      <<: *healthcheck
       test: ["CMD-SHELL", "curl -f http://localhost:8080 || exit 1"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
-    networks:
-      home:
 
 
   lidarr:
     image: linuxserver/lidarr
     container_name: lidarr
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/London
+    <<: *common
     volumes:
       - ./config/lidarr:/config
       - /mnt/storage:/data
     ports:
       - 32786:8686
-    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8686/lidarr/ping"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
+      <<: *healthcheck
+      test: ["CMD-SHELL", "curl -f http://localhost:8686/lidarr/ping || exit 1"]
     depends_on:
       qbittorrent:
         condition: service_healthy
@@ -152,27 +154,20 @@ services:
         condition: service_healthy
       prowlarr:
         condition: service_healthy
-    networks:
-      home:
+
 
   readarr:
     image: lscr.io/linuxserver/readarr:develop
     container_name: readarr
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/London
+    <<: *common
     volumes:
       - ./config/readarr:/config
       - /mnt/storage:/data
     ports:
       - 8787:8787
-    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8787/readarr/ping"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
+      <<: *healthcheck
+      test: ["CMD-SHELL", "curl -f http://localhost:8787/readarr/ping || exit 1"]
     depends_on:
       qbittorrent:
         condition: service_healthy
@@ -180,32 +175,22 @@ services:
         condition: service_healthy
       prowlarr:
         condition: service_healthy
-    networks:
-      home:
 
 
   prowlarr:
     image: linuxserver/prowlarr:develop
     container_name: prowlarr
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/London
+    <<: *common
     volumes:
       - ./config/prowlarr:/config
     ports:
       - 32787:9696
-    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9696/prowlarr/ping"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
+      <<: *healthcheck
+      test: ["CMD-SHELL", "curl -f http://localhost:9696/prowlarr/ping || exit 1"]
     depends_on:
       flaresolverr:
         condition: service_healthy
-    networks:
-      home:
 
 
   iperf3:
@@ -215,19 +200,21 @@ services:
       - 5201:5201
     restart: unless-stopped
     command: -s
-    networks:
-      home:
+    healthcheck:
+      <<: *healthcheck
+      # not a real healthcheck, only confirms there's a process named iperf3 running
+      test: ["CMD-SHELL", "grep iperf3 /proc/*[0-9]*/status || exit 1"]
 
 
   netdata:
     image: netdata/netdata
     container_name: netdata
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/London
-    network_mode: host
+      <<: *env
     restart: unless-stopped
+    healthcheck:
+      <<: *healthcheck
+    network_mode: host
     cap_add:
       - SYS_PTRACE
       - SYS_ADMIN
@@ -244,40 +231,34 @@ services:
       - /etc/VERSION:/host/etc/os-release:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
+
   recyclarr:
     image: ghcr.io/recyclarr/recyclarr
     container_name: recyclarr
-    user: 1000:1000
+    <<: *common
     volumes:
       - ./config/recyclarr:/config
-    environment:
-      - TZ=Europe/London
-    restart: unless-stopped
-    networks:
-      home:
+    healthcheck:
+      <<: *healthcheck
+      test: ["CMD-SHELL", "exit 0"] # TODO: figure out what kind of healthcheck we can do
 
 
   autobrr:
     image: ghcr.io/autobrr/autobrr:latest
     container_name: autobrr
+    <<: *common
     logging:
       driver: json-file
       options:
         max-file: "1"
         max-size: "10M"
-    user: 1000:1000
-    environment:
-      - TZ=Europe/London
     volumes:
       - ./config/autobrr:/config
     ports:
       - 7474:7474
-    restart: unless-stopped
     healthcheck:
+      <<: *healthcheck
       test: ["CMD", "curl", "-f", "http://localhost:7474"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
     depends_on:
       prowlarr:
         condition: service_healthy
@@ -289,23 +270,18 @@ services:
         condition: service_healthy
       readarr:
         condition: service_healthy
-    networks:
-      home:
 
 
   omegabrr:
     container_name: omegabrr
     image: ghcr.io/autobrr/omegabrr:latest
-    user: 1000:1000
+    <<: *common
+    healthcheck:
+      test: ['CMD','true']
     ports:
       - "7441:7441"
     volumes:
       - "./config/omegabrr:/config"
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f https://icanhazip.com/ || exit 1"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
     depends_on:
       autobrr:
         condition: service_healthy
@@ -319,87 +295,78 @@ services:
         condition: service_healthy
       readarr:
         condition: service_healthy
-    networks:
-      home:
 
 
   cross-seed:
     image: crossseed/cross-seed
     container_name: cross-seed
-    user: 1000:1000 # optional but recommended
+    <<: *common
+    healthcheck:
+      test: ['CMD','true']
     volumes:
       - ./config/cross-seed:/config
       - ./config/qbittorrent/qBittorrent/BT_backup:/torrents:ro # note that this volume can and should be mounted read-only
       - /mnt/storage:/data # this is optional dataDir path (for data-based matching) - will need to mirror your torrent client's path (like Arr's do)
       - /mnt/storage/cross-seeds:/cross-seeds
     command: daemon
-    restart: unless-stopped
     depends_on:
       prowlarr:
         condition: service_healthy
       qbittorrent:
         condition: service_healthy
-    networks:
-      home:
 
 
   qbit_manage:
     container_name: qbit_manage
     image: bobokun/qbit_manage
-    user: 1000:1000
+    <<: *common
+    healthcheck:
+      test: ['CMD','true']
     volumes:
       - ./config/qbit_manage/:/config:rw
       - /mnt/storage:/data
       - ./config/qbittorrent/qBittorrent/BT_backup:/qbittorrent/:ro
     environment:
-      - QBT_RUN=false
-      - QBT_SCHEDULE=5
-      - QBT_CONFIG=config.yml
-      - QBT_LOGFILE=activity.log
-      - QBT_CROSS_SEED=false
-      - QBT_RECHECK=true
-      - QBT_CAT_UPDATE=false
-      - QBT_TAG_UPDATE=true
-      - QBT_REM_UNREGISTERED=false
-      - QBT_REM_ORPHANED=false
-      - QBT_TAG_TRACKER_ERROR=true
-      - QBT_TAG_NOHARDLINKS=true
-      - QBT_SHARE_LIMITS=false
-      - QBT_SKIP_CLEANUP=false
-      - QBT_DRY_RUN=false
-      - QBT_LOG_LEVEL=WARNING
-      - QBT_DIVIDER==
-      - QBT_WIDTH=100
-      - QBT_DEBUG=false
-    restart: unless-stopped
+      <<: *env
+      QBT_RUN: false
+      QBT_SCHEDULE: 5
+      QBT_CONFIG: config.yml
+      QBT_LOGFILE: activity.log
+      QBT_CROSS_SEED: false
+      QBT_RECHECK: true
+      QBT_CAT_UPDATE: false
+      QBT_TAG_UPDATE: true
+      QBT_REM_UNREGISTERED: false
+      QBT_REM_ORPHANED: false
+      QBT_TAG_TRACKER_ERROR: true
+      QBT_TAG_NOHARDLINKS: true
+      QBT_SHARE_LIMITS: false
+      QBT_SKIP_CLEANUP: false
+      QBT_DRY_RUN: false
+      QBT_LOG_LEVEL: WARNING
+      QBT_DIVIDER: =
+      QBT_WIDTH: 100
+      QBT_DEBUG: false
     depends_on:
       qbittorrent:
         condition: service_healthy
-    networks:
-      home:
 
 
   flaresolverr:
     # DockerHub mirror flaresolverr/flaresolverr:latest
     image: ghcr.io/flaresolverr/flaresolverr:latest
     container_name: flaresolverr
+    <<: *common
     environment:
-      - LOG_LEVEL=${LOG_LEVEL:-info}
-      - LOG_HTML=${LOG_HTML:-false}
-      - CAPTCHA_SOLVER=${CAPTCHA_SOLVER:-none}
-      - TZ=Europe/London
+      <<: *env
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      LOG_HTML: ${LOG_HTML:-false}
+      CAPTCHA_SOLVER: ${CAPTCHA_SOLVER:-none}
     ports:
       - 8191:8191
-    restart: unless-stopped
     healthcheck:
+      <<: *healthcheck
       test: ["CMD", "curl", "-f", "http://localhost:8191"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
-    networks:
-      home:
 
 
-networks:
-  home:
-    driver: bridge
+
