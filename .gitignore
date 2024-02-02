@@ -22,3 +22,7 @@ config/autobrr/*
 config/omegabrr/*
 !config/omegabrr/config.yaml
 
+!config/homepage
+config/homepage/logs
+
+.env
