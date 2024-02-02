@@ -2,11 +2,13 @@
 # For configuration options and examples, please see:
 # https://gethomepage.dev/latest/configs/service-widgets
 
-- resources:
-    cpu: true
-    memory: true
-    disk: /
+- datetime:
+    text_size: xl
+    format:
+      dateStyle: short
+      timeStyle: short
+      hourCycle: h23
 
 - search:
-    provider: duckduckgo
+    provider: google
     target: _blank

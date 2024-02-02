@@ -25,8 +25,39 @@ x-common: &common
     home:
 
 services:
+  # traefik:
+  #   image: traefik:alpine
+  #   container_name: traefik
+  #   command: --api --docker
+  #   ports:
+  #     - "80:80"
+  #     - "33333:8080"
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+
+  # whoami:
+  #   image: emilevauge/whoami
+  #   container_name: whoami
+  #   labels:
+  #     - "traefik.frontend.rule=Host:whoami.docker.localhost"
+
+  glances:
+    image: nicolargo/glances:latest-full
+    container_name: glances
+    restart: always
+    pid: host
+    network_mode: host
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      TZ: Europe/London
+      GLANCES_OPT: "-w"
+
   homepage:
-    image: ghcr.io/gethomepage/homepage:latest
+    # image: ghcr.io/gethomepage/homepage:latest
+    build:
+      context: ./dockerfiles
+      dockerfile: ./homepage
     container_name: homepage
     restart: unless-stopped
     healthcheck:
@@ -36,6 +67,7 @@ services:
       - 3000:3000
     volumes:
       - ./config/homepage:/app/config
+      - ./images:/app/public/images
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       home:
@@ -58,6 +90,7 @@ services:
       - /mnt/storage/movies:/movies
       - /mnt/storage/music:/music
     labels:
+      - homepage.weight=1
       - homepage.group=media
       - homepage.name=plex
       - homepage.icon=plex.svg
@@ -87,8 +120,9 @@ services:
       prowlarr:
         condition: service_healthy
     labels:
+      - homepage.weight=3
       - homepage.group=media
-      - homepage.name=Sonarr
+      - homepage.name=sonarr
       - homepage.icon=sonarr.svg
       - homepage.href=http://192.168.1.102:32784
       - homepage.widget.type=sonarr
@@ -117,8 +151,9 @@ services:
       prowlarr:
         condition: service_healthy
     labels:
+      - homepage.weight=2
       - homepage.group=media
-      - homepage.name=Radarr
+      - homepage.name=radarr
       - homepage.icon=radarr.svg
       - homepage.href=http://192.168.1.102:32783
       - homepage.widget.type=radarr
@@ -141,6 +176,7 @@ services:
       <<: *healthcheck
       test: ["CMD-SHELL", "curl -f http://localhost:8080 || exit 1"]
     labels:
+      - homepage.weight=3
       - homepage.group=network
       - homepage.name=sabnzbd
       - homepage.icon=sabnzbd.svg
@@ -148,6 +184,7 @@ services:
       - homepage.widget.type=sabnzbd
       - homepage.widget.url=http://192.168.1.102:32781
       - homepage.widget.key=${SABNZBD_API_KEY}
+      - homepage.widget.refreshInterval=1000
 
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:4.6.3-r0-ls308
@@ -168,6 +205,7 @@ services:
       <<: *healthcheck
       test: ["CMD-SHELL", "curl -f http://localhost:8080 || exit 1"]
     labels:
+        - homepage.weight=2
         - homepage.group=network
         - homepage.name=qbittorrent
         - homepage.icon=qbittorrent.svg
@@ -176,6 +214,7 @@ services:
         - homepage.widget.url=http://192.168.1.102:8080
         - homepage.widget.username=${QBIT_USER}
         - homepage.widget.password=${QBIT_PASS}
+        - homepage.widget.refreshInterval=1000
 
   lidarr:
     image: linuxserver/lidarr
@@ -197,6 +236,7 @@ services:
       prowlarr:
         condition: service_healthy
     labels:
+      - homepage.weight=4
       - homepage.group=media
       - homepage.name=lidarr
       - homepage.icon=lidarr.svg
@@ -240,7 +280,7 @@ services:
       flaresolverr:
         condition: service_healthy
     labels:
-      - homepage.group=media
+      - homepage.group=brr
       - homepage.name=prowlarr
       - homepage.icon=prowlarr.svg
       - homepage.href=http://192.168.1.102:32787
@@ -284,13 +324,13 @@ services:
       - /sys:/host/sys:ro
       - /etc/VERSION:/host/etc/os-release:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-    labels:
-      - homepage.group=network
-      - homepage.name=Netdata
-      - homepage.icon=netdata.svg
-      - homepage.href=http://192.168.1.102:19999
-      - homepage.widget.type=netdata
-      - homepage.widget.url=http://192.168.1.102:19999
+    # labels:
+    #   - homepage.group=network
+    #   - homepage.name=Netdata
+    #   - homepage.icon=netdata.svg
+    #   - homepage.href=http://192.168.1.102:19999
+    #   - homepage.widget.type=netdata
+    #   - homepage.widget.url=http://192.168.1.102:19999
 
   recyclarr:
     image: ghcr.io/recyclarr/recyclarr
@@ -330,7 +370,7 @@ services:
       readarr:
         condition: service_healthy
     labels:
-      - homepage.group=media
+      - homepage.group=brr
       - homepage.name=autobrr
       - homepage.icon=autobrr.svg
       - homepage.href=http://192.168.1.102:7474

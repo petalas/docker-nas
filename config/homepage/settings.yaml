@@ -2,6 +2,46 @@
 # For configuration options and examples, please see:
 # https://gethomepage.dev/latest/configs/settings
 
+title: zeus
+# background: 
+#   image: /images/bg1.jpeg
+#   blur: none # sm, "", md, xl... see https://tailwindcss.com/docs/backdrop-blur
+#   saturate: 50 # 0, 50, 100... see https://tailwindcss.com/docs/backdrop-saturate
+#   brightness: 75 # 0, 50, 75... see https://tailwindcss.com/docs/backdrop-brightness
+#   opacity: 100 # 0-100
+
+theme: dark
+
+headerStyle: boxed
+
+language: en-GB
+
+useEqualHeights: true
+
+layout:
+  glances:
+      header: false
+      style: row
+      columns: 4
+  network:
+      header: false
+      style: row
+      columns: 3
+  media:
+    header: false
+    style: row
+    columns: 4
+  brr:
+    header: false
+    style: row
+    columns: 2
+  calendar:
+    header: false
+    style: row
+    columns: 2
+
 providers:
   openweathermap: openweathermapapikey
   weatherapi: weatherapiapikey
+
+hideVersion: true

@@ -1,11 +1,62 @@
 ---
 # For configuration options and examples, please see:
 # https://gethomepage.dev/latest/configs/services
-- network:
 
-        - pihole:
-                href: http://pi.hole/admin/
-                icon: pi-hole.svg
-                widget:
-                      type: pihole
-                      url: http://pi.hole
+- network:
+    - pihole:
+        weight: 1
+        href: http://pi.hole/admin/
+        icon: pi-hole.svg
+        widget:
+          type: pihole
+          url: http://pi.hole
+
+- calendar:
+  - calendar:
+        widget:
+            type: calendar
+            firstDayInWeek: sunday # optional - defaults to monday
+            view: monthly # optional - possible values monthly, agenda
+            maxEvents: 10 # optional - defaults to 10
+            showTime: true # optional - show time for event happening today - defaults to false
+            timezone: Europe/London # optional and only when timezone is not detected properly (slightly slower performance) - force timezone for ical events (if it's the same - no change, if missing or different in ical - will be converted to this timezone)
+            integrations: # optional
+              - type: sonarr # active widget type that is currently enabled on homepage - possible values: radarr, sonarr, lidarr, readarr, ical
+                service_group: media # group name where widget exists
+                service_name: sonarr # service name for that widget
+                color: teal # optional - defaults to pre-defined color for the service (teal for sonarr)
+                params: # optional - additional params for the service
+                  unmonitored: false # optional - defaults to false, used with *arr stack
+              - type: radarr # active widget type that is currently enabled on homepage - possible values: radarr, sonarr, lidarr, readarr, ical
+                service_group: media # group name where widget exists
+                service_name: radarr # service name for that widget
+                color: yellow # optional - defaults to pre-defined color for the service (teal for sonarr)
+                params: # optional - additional params for the service
+                  unmonitored: false # optional - defaults to false, used with *arr stack
+
+- glances:
+  - cpu:
+        widget:
+          type: glances
+          url: http://192.168.1.102:61208
+          metric: cpu
+  - mem:
+      widget:
+        type: glances
+        url: http://192.168.1.102:61208
+        # metric: fs:/mnt/storage
+        metric: memory
+        chart: true
+  - net:
+      widget:
+        type: glances
+        url: http://192.168.1.102:61208
+        metric: network:enp6s18
+        chart: true
+  - sda:
+      widget:
+        type: glances
+        url: http://192.168.1.102:61208
+        metric: disk:sda
+        chart: true
+  

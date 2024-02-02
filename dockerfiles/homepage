@@ -1,0 +1,36 @@
+# FROM ghcr.io/gethomepage/homepage:latest
+FROM docker.io/node:18-alpine
+
+# install general dependencies
+RUN apk add --no-cache git libc6-compat su-exec
+RUN apk add --no-cache --virtual .gyp python3 make g++
+
+# clone into /app
+RUN git clone --depth 1 https://github.com/gethomepage/homepage.git /app
+WORKDIR /app
+
+# install build dependencies
+RUN npm i -g pnpm && pnpm install -r
+
+# replace widgets with our own versions that supports refreshInterval
+COPY sabnzbd.jsx /app/src/widgets/sabnzbd/component.jsx
+COPY qbittorrent.jsx /app/src/widgets/qbittorrent/component.jsx
+
+# build
+SHELL ["/bin/ash", "-xeo", "pipefail", "-c"]
+RUN npm run telemetry \
+  && mkdir config \
+  && npm run build
+
+# server.js is generated during the build in /app/.next/standalone
+RUN cp -r /app/.next/standalone/server.js ./
+RUN cp docker-entrypoint.sh /usr/local/bin/
+
+ENV PORT 3000
+EXPOSE $PORT
+
+HEALTHCHECK --interval=10s --timeout=3s --start-period=20s \
+  CMD wget --no-verbose --tries=1 --spider --no-check-certificate http://localhost:$PORT/api/healthcheck || exit 1
+
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["node", "server.js"]
