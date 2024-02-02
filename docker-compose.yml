@@ -57,6 +57,14 @@ services:
       - /mnt/storage/tv:/tv
       - /mnt/storage/movies:/movies
       - /mnt/storage/music:/music
+    labels:
+      - homepage.group=media
+      - homepage.name=plex
+      - homepage.icon=plex.svg
+      - homepage.href=http://192.168.1.102:32400
+      - homepage.widget.type=plex
+      - homepage.widget.url=http://192.168.1.102:32400
+      - homepage.widget.key=${PLEX_API_KEY}
 
   sonarr:
     image: lscr.io/linuxserver/sonarr:develop
@@ -78,6 +86,15 @@ services:
         condition: service_healthy
       prowlarr:
         condition: service_healthy
+    labels:
+      - homepage.group=media
+      - homepage.name=Sonarr
+      - homepage.icon=sonarr.svg
+      - homepage.href=http://192.168.1.102:32784
+      - homepage.widget.type=sonarr
+      - homepage.widget.url=http://192.168.1.102:32784
+      - homepage.widget.key=${SONARR_API_KEY}
+      - homepage.widget.enableQueue=true
 
   radarr:
     image: linuxserver/radarr
@@ -104,10 +121,10 @@ services:
       - homepage.name=Radarr
       - homepage.icon=radarr.svg
       - homepage.href=http://192.168.1.102:32783
-      - homepage.service.showStats=true
       - homepage.widget.type=radarr
       - homepage.widget.url=http://192.168.1.102:32783
-      - "homepage.widget.key=${RADARR_API_KEY}"
+      - homepage.widget.key=${RADARR_API_KEY}
+      - homepage.widget.enableQueue=true
       
 
   sabnzbd:
@@ -123,6 +140,14 @@ services:
     healthcheck:
       <<: *healthcheck
       test: ["CMD-SHELL", "curl -f http://localhost:8080 || exit 1"]
+    labels:
+      - homepage.group=network
+      - homepage.name=sabnzbd
+      - homepage.icon=sabnzbd.svg
+      - homepage.href=http://192.168.1.102:32781
+      - homepage.widget.type=sabnzbd
+      - homepage.widget.url=http://192.168.1.102:32781
+      - homepage.widget.key=${SABNZBD_API_KEY}
 
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:4.6.3-r0-ls308
@@ -142,6 +167,15 @@ services:
     healthcheck:
       <<: *healthcheck
       test: ["CMD-SHELL", "curl -f http://localhost:8080 || exit 1"]
+    labels:
+        - homepage.group=network
+        - homepage.name=qbittorrent
+        - homepage.icon=qbittorrent.svg
+        - homepage.href=http://192.168.1.102:8080
+        - homepage.widget.type=qbittorrent
+        - homepage.widget.url=http://192.168.1.102:8080
+        - homepage.widget.username=${QBIT_USER}
+        - homepage.widget.password=${QBIT_PASS}
 
   lidarr:
     image: linuxserver/lidarr
@@ -162,6 +196,14 @@ services:
         condition: service_healthy
       prowlarr:
         condition: service_healthy
+    labels:
+      - homepage.group=media
+      - homepage.name=lidarr
+      - homepage.icon=lidarr.svg
+      - homepage.href=http://192.168.1.102:32786
+      - homepage.widget.type=lidarr
+      - homepage.widget.url=http://192.168.1.102:32786
+      - homepage.widget.key=${LIDARR_API_KEY}
 
   readarr:
     image: lscr.io/linuxserver/readarr:develop
@@ -197,6 +239,14 @@ services:
     depends_on:
       flaresolverr:
         condition: service_healthy
+    labels:
+      - homepage.group=media
+      - homepage.name=prowlarr
+      - homepage.icon=prowlarr.svg
+      - homepage.href=http://192.168.1.102:32787
+      - homepage.widget.type=prowlarr
+      - homepage.widget.url=http://192.168.1.102:32787
+      - homepage.widget.key=${PROWLARR_API_KEY}
 
   iperf3:
     image: networkstatic/iperf3
@@ -234,6 +284,13 @@ services:
       - /sys:/host/sys:ro
       - /etc/VERSION:/host/etc/os-release:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      - homepage.group=network
+      - homepage.name=Netdata
+      - homepage.icon=netdata.svg
+      - homepage.href=http://192.168.1.102:19999
+      - homepage.widget.type=netdata
+      - homepage.widget.url=http://192.168.1.102:19999
 
   recyclarr:
     image: ghcr.io/recyclarr/recyclarr
@@ -272,6 +329,14 @@ services:
         condition: service_healthy
       readarr:
         condition: service_healthy
+    labels:
+      - homepage.group=media
+      - homepage.name=autobrr
+      - homepage.icon=autobrr.svg
+      - homepage.href=http://192.168.1.102:7474
+      - homepage.widget.type=autobrr
+      - homepage.widget.url=http://192.168.1.102:7474
+      - homepage.widget.key=${AUTOBRR_API_KEY}
 
   omegabrr:
     container_name: omegabrr

@@ -2,31 +2,6 @@
 # For configuration options and examples, please see:
 # https://gethomepage.dev/latest/configs/services
 - network:
-        - netdata:
-                href: http://192.168.1.102:19999
-                icon: netdata.svg
-                widget:
-                      type: netdata
-                      url: http://192.168.1.102:19999
-
-        - qBittorrent:
-                href: http://192.168.1.102:8080
-                icon: qbittorrent.png
-                widget:
-                      type: qbittorrent
-                      url: http://192.168.1.102:8080
-                      username: admin
-                      password: adminadmin
-
-        - SABnzbd:
-                href: http://192.168.1.102:32781
-                icon: sabnzbd.svg
-                widget:
-                      type: sabnzbd
-                      url: http://192.168.1.102:32781
-                      key: 4ad979a526b0c997fd9c421eef630eec
-                      refreshInterval: 16
-                      showStats: true
 
         - pihole:
                 href: http://pi.hole/admin/
