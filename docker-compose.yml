@@ -10,19 +10,19 @@ x-env: &env
   TZ: Europe/London
 
 x-healthcheck: &healthcheck
-      test: ["CMD-SHELL", "curl -f https://icanhazip.com/ || exit 1"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
+  test: ["CMD-SHELL", "curl -f https://icanhazip.com/ || exit 1"]
+  interval: 10s
+  timeout: 3s
+  retries: 5
 
 x-common: &common
   environment:
     <<: *env
   restart: unless-stopped
   healthcheck:
-      <<: *healthcheck
+    <<: *healthcheck
   networks:
-      home:
+    home:
 
 services:
   homepage:
@@ -35,7 +35,7 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ./config/homepage:/app/config 
+      - ./config/homepage:/app/config
       - /var/run/docker.sock:/var/run/docker.sock
 
   plex:
@@ -77,7 +77,6 @@ services:
       prowlarr:
         condition: service_healthy
 
-
   radarr:
     image: linuxserver/radarr
     container_name: radarr
@@ -99,7 +98,6 @@ services:
       prowlarr:
         condition: service_healthy
 
-
   sabnzbd:
     image: linuxserver/sabnzbd
     container_name: sabnzbd
@@ -113,7 +111,6 @@ services:
     healthcheck:
       <<: *healthcheck
       test: ["CMD-SHELL", "curl -f http://localhost:8080 || exit 1"]
-
 
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:4.6.3-r0-ls308
@@ -133,7 +130,6 @@ services:
     healthcheck:
       <<: *healthcheck
       test: ["CMD-SHELL", "curl -f http://localhost:8080 || exit 1"]
-
 
   lidarr:
     image: linuxserver/lidarr
@@ -155,7 +151,6 @@ services:
       prowlarr:
         condition: service_healthy
 
-
   readarr:
     image: lscr.io/linuxserver/readarr:develop
     container_name: readarr
@@ -176,7 +171,6 @@ services:
       prowlarr:
         condition: service_healthy
 
-
   prowlarr:
     image: linuxserver/prowlarr:develop
     container_name: prowlarr
@@ -192,7 +186,6 @@ services:
       flaresolverr:
         condition: service_healthy
 
-
   iperf3:
     image: networkstatic/iperf3
     container_name: iperf3
@@ -204,7 +197,6 @@ services:
       <<: *healthcheck
       # not a real healthcheck, only confirms there's a process named iperf3 running
       test: ["CMD-SHELL", "grep iperf3 /proc/*[0-9]*/status || exit 1"]
-
 
   netdata:
     image: netdata/netdata
@@ -231,7 +223,6 @@ services:
       - /etc/VERSION:/host/etc/os-release:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
-
   recyclarr:
     image: ghcr.io/recyclarr/recyclarr
     container_name: recyclarr
@@ -241,7 +232,6 @@ services:
     healthcheck:
       <<: *healthcheck
       test: ["CMD-SHELL", "exit 0"] # TODO: figure out what kind of healthcheck we can do
-
 
   autobrr:
     image: ghcr.io/autobrr/autobrr:latest
@@ -271,13 +261,12 @@ services:
       readarr:
         condition: service_healthy
 
-
   omegabrr:
     container_name: omegabrr
     image: ghcr.io/autobrr/omegabrr:latest
     <<: *common
     healthcheck:
-      test: ['CMD','true']
+      test: ["CMD", "true"]
     ports:
       - "7441:7441"
     volumes:
@@ -296,13 +285,12 @@ services:
       readarr:
         condition: service_healthy
 
-
   cross-seed:
     image: crossseed/cross-seed
     container_name: cross-seed
     <<: *common
     healthcheck:
-      test: ['CMD','true']
+      test: ["CMD", "true"]
     volumes:
       - ./config/cross-seed:/config
       - ./config/qbittorrent/qBittorrent/BT_backup:/torrents:ro # note that this volume can and should be mounted read-only
@@ -315,42 +303,40 @@ services:
       qbittorrent:
         condition: service_healthy
 
-
   qbit_manage:
     container_name: qbit_manage
     image: bobokun/qbit_manage
     <<: *common
     healthcheck:
-      test: ['CMD','true']
+      test: ["CMD", "true"]
     volumes:
       - ./config/qbit_manage/:/config:rw
       - /mnt/storage:/data
       - ./config/qbittorrent/qBittorrent/BT_backup:/qbittorrent/:ro
     environment:
       <<: *env
-      QBT_RUN: false
-      QBT_SCHEDULE: 5
-      QBT_CONFIG: config.yml
-      QBT_LOGFILE: activity.log
-      QBT_CROSS_SEED: false
-      QBT_RECHECK: true
-      QBT_CAT_UPDATE: false
-      QBT_TAG_UPDATE: true
-      QBT_REM_UNREGISTERED: false
-      QBT_REM_ORPHANED: false
-      QBT_TAG_TRACKER_ERROR: true
-      QBT_TAG_NOHARDLINKS: true
-      QBT_SHARE_LIMITS: false
-      QBT_SKIP_CLEANUP: false
-      QBT_DRY_RUN: false
-      QBT_LOG_LEVEL: WARNING
-      QBT_DIVIDER: =
-      QBT_WIDTH: 100
-      QBT_DEBUG: false
+      QBT_RUN: "false"
+      QBT_SCHEDULE: "5"
+      QBT_CONFIG: "config.yml"
+      QBT_LOGFILE: "activity.log"
+      QBT_CROSS_SEED: "false"
+      QBT_RECHECK: "true"
+      QBT_CAT_UPDATE: "false"
+      QBT_TAG_UPDATE: "true"
+      QBT_REM_UNREGISTERED: "false"
+      QBT_REM_ORPHANED: "false"
+      QBT_TAG_TRACKER_ERROR: "true"
+      QBT_TAG_NOHARDLINKS: "true"
+      QBT_SHARE_LIMITS: "false"
+      QBT_SKIP_CLEANUP: "false"
+      QBT_DRY_RUN: "false"
+      QBT_LOG_LEVEL: "WARNING"
+      QBT_DIVIDER: ""
+      QBT_WIDTH: "100"
+      QBT_DEBUG: "false"
     depends_on:
       qbittorrent:
         condition: service_healthy
-
 
   flaresolverr:
     # DockerHub mirror flaresolverr/flaresolverr:latest
@@ -367,6 +353,3 @@ services:
     healthcheck:
       <<: *healthcheck
       test: ["CMD", "curl", "-f", "http://localhost:8191"]
-
-
-
