@@ -21,5 +21,6 @@
 
 # search
 - search:
-    provider: google
-    target: _blank
+    provider: custom
+    url: https://www.google.co.uk/search?q=site%3Areddit.com+
+    target: _top

@@ -93,7 +93,7 @@ services:
       - /mnt/storage/music:/music
     labels:
       - homepage.weight=1
-      - homepage.group=media
+      - homepage.group=calendar
       - homepage.name=plex
       - homepage.icon=plex.svg
       - homepage.href=http://192.168.1.102:32400

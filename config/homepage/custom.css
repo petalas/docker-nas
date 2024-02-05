@@ -1,3 +1,32 @@
 /* .\!block {
     margin-bottom: 0.5rem;
 } */
+
+#inner_wrapper > div {
+    display: grid;
+    grid-template-columns: 4fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+        "header header"
+        "main sidebar"
+}
+
+#information-widgets {
+   grid-area: header;
+}
+
+#layout-groups {
+    grid-area: main;
+    margin: 0.2rem;
+    padding: 0.2rem;
+}
+
+#bookmarks {
+    grid-area: sidebar;
+    margin: 0.2rem;
+    padding: 0.2rem;
+}
+
+.bookmark > a {
+    margin: .2rem;
+}

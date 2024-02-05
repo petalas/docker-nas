@@ -2,25 +2,84 @@
 # For configuration options and examples, please see:
 # https://gethomepage.dev/latest/configs/bookmarks
 
-- NAS:
+- home:
+    - OPNsense:
+      - abbr: OS
+        icon: opnsense.svg
+        href: https://192.168.1.1
+    - proxmox:
+      - abbr: PM
+        icon: proxmox.svg
+        href: https://192.168.1.100:8006
+    - pi-hole:
+      - abbr: PM
+        icon: pi-hole.svg
+        href: http://192.168.1.10
+    - omada:
+      - abbr: OC
+        icon: omada.svg
+        href: https://192.168.1.10:8043
+    - netdata:
+      - abbr: ND
+        icon: netdata.svg
+        href: http://192.168.1.102:19999
+    - plex:
+      - abbr: P
+        icon: plex.svg
+        href: http://192.168.1.102:32400
     - radarr:
       - abbr: R
-        icon: radarr.png
-        href: http://192.168.1.102:32783/
+        icon: radarr.svg
+        href: http://192.168.1.102:32783
+    - sonarr:
+      - abbr: S
+        icon: sonarr.svg
+        href: http://192.168.1.102:32784
+    - lidarr:
+      - abbr: L
+        icon: lidarr.svg
+        href: http://192.168.1.102:32786
+    - readarr:
+      - abbr: R
+        icon: readarr.svg
+        href: http://192.168.1.102:8787
+    - prowlarr:
+      - abbr: P
+        icon: prowlarr.svg
+        href: http://192.168.1.102:32787
+    - autobrr:
+      - abbr: A
+        icon: autobrr.svg
+        href: http://192.168.1.102:7474
 
-- Developer:
-    - Github:
+- dev:
+    - github:
         - abbr: GH
-          href: https://github.com/
+          icon: github.svg
+          href: https://github.com
+    - stackoverflow:
+        - abbr: SO
+          icon: https://upload.wikimedia.org/wikipedia/commons/e/ef/Stack_Overflow_icon.svg
+          href: https://stackoverflow.com
+    - regex:
+        - abbr: R
+          icon: mdi-regex.svg
+          href: https://regex101.com
+    - json:
+        - abbr: J
+          icon: mdi-code-json.svg
+          href: https://jsonviewer.stack.hu
 
-- Social:
-    - Reddit:
-        - abbr: RE
-          href: https://reddit.com/
-
-- Entertainment:
-    - YouTube:
-        - abbr: YT
-          href: https://youtube.com/
-
-
+- misc:
+    - speedtest:
+        - abbr: S
+          icon: cloudflare.svg
+          href: https://speed.cloudflare.com
+    - speedtest:
+        - abbr: S
+          icon: mdi-speedometer.svg
+          href: https://speedtest.net
+    - dnsleaktest:
+        - abbr: D
+          icon: mdi-dns.svg
+          href: https://dnsleaktest.com
