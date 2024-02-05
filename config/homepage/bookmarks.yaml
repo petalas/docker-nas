@@ -23,6 +23,14 @@
       - abbr: ND
         icon: netdata.svg
         href: http://192.168.1.102:19999
+    - qbittorrent:
+      - abbr: QB
+        icon: qbittorrent.svg
+        href: http://192.168.1.102:8080
+    - sabnzbd:
+      - abbr: QB
+        icon: sabnzbd.svg
+        href: http://192.168.1.102:32781/
     - plex:
       - abbr: P
         icon: plex.svg

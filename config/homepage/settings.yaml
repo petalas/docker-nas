@@ -4,14 +4,17 @@
 
 title: zeus
 # background:
-#   image: /images/bg1.jpeg
+#   # image: https://i.redd.it/cq0wbwwjc6ja1.png
+#   # image: https://i.redd.it/alxas78kq5ta1.jpg
+#   image: https://preview.redd.it/d09q2vfldwma1.jpg?auto=webp&s=3536a3d58cdf28f73949ec4dc6a8ec64fb8d7b53
 #   blur: none # sm, "", md, xl... see https://tailwindcss.com/docs/backdrop-blur
-#   saturate: 50 # 0, 50, 100... see https://tailwindcss.com/docs/backdrop-saturate
-#   brightness: 75 # 0, 50, 75... see https://tailwindcss.com/docs/backdrop-brightness
-#   opacity: 100 # 0-100
+#   saturate: 100 # 0, 50, 100... see https://tailwindcss.com/docs/backdrop-saturate
+#   brightness: 100 # 0, 50, 75... see https://tailwindcss.com/docs/backdrop-brightness
+#   opacity: 20 # 0-100
 
+cardBlur: xl
 theme: dark
-color: neutral
+color: catppuccin
 
 # headerStyle: boxed
 headerStyle: underlined

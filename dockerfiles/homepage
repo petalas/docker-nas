@@ -16,6 +16,11 @@ RUN npm i -g pnpm && pnpm install -r
 COPY sabnzbd.jsx /app/src/widgets/sabnzbd/component.jsx
 COPY qbittorrent.jsx /app/src/widgets/qbittorrent/component.jsx
 
+# replace themes to make custom color scheme available
+COPY themes.js /app/src/utils/styles/themes.js
+COPY color.jsx /app/src/components/toggles/color.jsx
+COPY theme.css /app/src/styles/theme.css
+
 # build
 SHELL ["/bin/ash", "-xeo", "pipefail", "-c"]
 RUN npm run telemetry \
