@@ -60,4 +60,3 @@
         # metric: disk:sda
         metric: fs:/mnt/storage
         chart: true
-  

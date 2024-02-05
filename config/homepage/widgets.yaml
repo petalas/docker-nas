@@ -2,6 +2,16 @@
 # For configuration options and examples, please see:
 # https://gethomepage.dev/latest/configs/service-widgets
 
+# weather
+- openmeteo:
+    label: London #optional
+    latitude: 51.5644965
+    longitude: 0.1088053
+    timezone: Europe/London
+    units: metric # or imperial
+    cache: 5 # Time in minutes to cache API responses, to stay within limits
+
+# date and time
 - datetime:
     text_size: xl
     format:
@@ -9,6 +19,7 @@
       timeStyle: short
       hourCycle: h23
 
+# search
 - search:
     provider: google
     target: _blank
