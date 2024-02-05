@@ -48,7 +48,9 @@ services:
     pid: host
     network_mode: host
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./config/glances:/etc/glances
+      - /mnt:/mnt:ro
     environment:
       TZ: Europe/London
       GLANCES_OPT: "-w"

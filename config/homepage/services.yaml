@@ -17,7 +17,7 @@
             type: calendar
             firstDayInWeek: sunday # optional - defaults to monday
             view: monthly # optional - possible values monthly, agenda
-            maxEvents: 10 # optional - defaults to 10
+            maxEvents: 20 # optional - defaults to 10
             showTime: true # optional - show time for event happening today - defaults to false
             timezone: Europe/London # optional and only when timezone is not detected properly (slightly slower performance) - force timezone for ical events (if it's the same - no change, if missing or different in ical - will be converted to this timezone)
             integrations: # optional
@@ -40,23 +40,24 @@
           type: glances
           url: http://192.168.1.102:61208
           metric: cpu
-  - mem:
+  - memory:
       widget:
         type: glances
         url: http://192.168.1.102:61208
         # metric: fs:/mnt/storage
         metric: memory
         chart: true
-  - net:
+  - enp6s18:
       widget:
         type: glances
         url: http://192.168.1.102:61208
         metric: network:enp6s18
         chart: true
-  - sda:
+  - /mnt/storage:
       widget:
         type: glances
         url: http://192.168.1.102:61208
-        metric: disk:sda
+        # metric: disk:sda
+        metric: fs:/mnt/storage
         chart: true
   

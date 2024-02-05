@@ -25,4 +25,6 @@ config/omegabrr/*
 !config/homepage
 config/homepage/logs
 
+!config/glances
+
 .env
