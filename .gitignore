@@ -27,4 +27,7 @@ config/homepage/logs
 
 !config/glances
 
+!config/traefik
+config/traefik/acme.json
+
 .env

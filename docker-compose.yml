@@ -25,26 +25,55 @@ x-common: &common
     home:
 
 services:
-  # traefik:
-  #   image: traefik:alpine
-  #   container_name: traefik
-  #   command: --api --docker
-  #   ports:
-  #     - "80:80"
-  #     - "33333:8080"
-  #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./config/traefik/traefik.yaml:/traefik.yaml:ro
+      - ./config/traefik/acme.json:/acme.json
+    environment:
+      - CF_DNS_API_TOKEN=${CLOUDFLARE_TRAEFIK_TOKEN}
+    networks:
+      home:
+    labels:
+      - traefik.enable=true
+      - traefik.http.middlewares.admin.basicauth.users=${TRAEFIK_BASIC_AUTH_USER}:${TRAEFIK_BASIC_AUTH_PASSWORD}
+      - traefik.http.services.traefik-dashboard.loadbalancer.server.port=443
+      - traefik.http.routers.traefik-dashboard.rule=Host(`lab.petalas.dev`)
+      - traefik.http.routers.traefik-dashboard.entrypoints=websecure
+      - traefik.http.routers.traefik-dashboard.service=api@internal
+      - traefik.http.routers.traefik-dashboard.middlewares=admin
+      - traefik.http.routers.traefik-dashboard.tls.certresolver=cloudflare
+      - traefik.http.routers.traefik-dashboard.tls.domains[0].main=lab.petalas.dev
+      - traefik.http.routers.traefik-dashboard.tls.domains[0].sans=*.lab.petalas.dev
 
-  # whoami:
-  #   image: emilevauge/whoami
-  #   container_name: whoami
-  #   labels:
-  #     - "traefik.frontend.rule=Host:whoami.docker.localhost"
+
+  whoami:
+    image: traefik/whoami
+    container_name: whoami
+    networks:
+      home:
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.whoami.service=whoami
+      - traefik.http.routers.whoami.entrypoints=websecure
+      - traefik.http.routers.whoami.rule=Host(`whoami.lab.petalas.dev`)
+      - traefik.http.routers.whoami.tls=true
+      - traefik.http.services.whoami.loadbalancer.server.port=80
+
 
   glances:
     image: nicolargo/glances:latest-full
     container_name: glances
-    restart: always
+    restart: unless-stopped
     pid: host
     network_mode: host
     volumes:
@@ -54,6 +83,8 @@ services:
     environment:
       TZ: Europe/London
       GLANCES_OPT: "-w"
+    labels:
+      - traefik.enable=false
 
   homepage:
     # image: ghcr.io/gethomepage/homepage:latest
@@ -73,6 +104,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       home:
+    labels:
+      - traefik.enable=false
 
   plex:
     image: linuxserver/plex
@@ -92,6 +125,7 @@ services:
       - /mnt/storage/movies:/movies
       - /mnt/storage/music:/music
     labels:
+      - traefik.enable=false
       - homepage.weight=1
       - homepage.group=calendar
       - homepage.name=plex
@@ -122,6 +156,7 @@ services:
       prowlarr:
         condition: service_healthy
     labels:
+      - traefik.enable=false
       - homepage.weight=3
       - homepage.group=media
       - homepage.name=sonarr
@@ -153,6 +188,7 @@ services:
       prowlarr:
         condition: service_healthy
     labels:
+      - traefik.enable=false
       - homepage.weight=2
       - homepage.group=media
       - homepage.name=radarr
@@ -178,6 +214,7 @@ services:
       <<: *healthcheck
       test: ["CMD-SHELL", "curl -f http://localhost:8080 || exit 1"]
     labels:
+      - traefik.enable=false
       - homepage.weight=3
       - homepage.group=network
       - homepage.name=sabnzbd
@@ -207,16 +244,17 @@ services:
       <<: *healthcheck
       test: ["CMD-SHELL", "curl -f http://localhost:8080 || exit 1"]
     labels:
-        - homepage.weight=2
-        - homepage.group=network
-        - homepage.name=qbittorrent
-        - homepage.icon=qbittorrent.svg
-        - homepage.href=http://192.168.1.102:8080
-        - homepage.widget.type=qbittorrent
-        - homepage.widget.url=http://192.168.1.102:8080
-        - homepage.widget.username=${QBIT_USER}
-        - homepage.widget.password=${QBIT_PASS}
-        - homepage.widget.refreshInterval=1000
+      - traefik.enable=false
+      - homepage.weight=2
+      - homepage.group=network
+      - homepage.name=qbittorrent
+      - homepage.icon=qbittorrent.svg
+      - homepage.href=http://192.168.1.102:8080
+      - homepage.widget.type=qbittorrent
+      - homepage.widget.url=http://192.168.1.102:8080
+      - homepage.widget.username=${QBIT_USER}
+      - homepage.widget.password=${QBIT_PASS}
+      - homepage.widget.refreshInterval=1000
 
   lidarr:
     image: linuxserver/lidarr
@@ -238,6 +276,7 @@ services:
       prowlarr:
         condition: service_healthy
     labels:
+      - traefik.enable=false
       - homepage.weight=4
       - homepage.group=media
       - homepage.name=lidarr
@@ -266,6 +305,8 @@ services:
         condition: service_healthy
       prowlarr:
         condition: service_healthy
+    labels:
+      - traefik.enable=false
 
   prowlarr:
     image: linuxserver/prowlarr:develop
@@ -282,6 +323,7 @@ services:
       flaresolverr:
         condition: service_healthy
     labels:
+      - traefik.enable=false
       - homepage.group=brr
       - homepage.name=prowlarr
       - homepage.icon=prowlarr.svg
@@ -301,6 +343,8 @@ services:
       <<: *healthcheck
       # not a real healthcheck, only confirms there's a process named iperf3 running
       test: ["CMD-SHELL", "grep iperf3 /proc/*[0-9]*/status || exit 1"]
+    labels:
+      - traefik.enable=false
 
   netdata:
     image: netdata/netdata
@@ -326,13 +370,14 @@ services:
       - /sys:/host/sys:ro
       - /etc/VERSION:/host/etc/os-release:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-    # labels:
-    #   - homepage.group=network
-    #   - homepage.name=Netdata
-    #   - homepage.icon=netdata.svg
-    #   - homepage.href=http://192.168.1.102:19999
-    #   - homepage.widget.type=netdata
-    #   - homepage.widget.url=http://192.168.1.102:19999
+    labels:
+      - traefik.enable=false
+      # - homepage.group=network
+      # - homepage.name=Netdata
+      # - homepage.icon=netdata.svg
+      # - homepage.href=http://192.168.1.102:19999
+      # - homepage.widget.type=netdata
+      # - homepage.widget.url=http://192.168.1.102:19999
 
   recyclarr:
     image: ghcr.io/recyclarr/recyclarr
@@ -343,6 +388,8 @@ services:
     healthcheck:
       <<: *healthcheck
       test: ["CMD-SHELL", "exit 0"] # TODO: figure out what kind of healthcheck we can do
+    labels:
+      - traefik.enable=false
 
   autobrr:
     image: ghcr.io/autobrr/autobrr:latest
@@ -372,6 +419,7 @@ services:
       readarr:
         condition: service_healthy
     labels:
+      - traefik.enable=false
       - homepage.group=brr
       - homepage.name=autobrr
       - homepage.icon=autobrr.svg
@@ -403,6 +451,8 @@ services:
         condition: service_healthy
       readarr:
         condition: service_healthy
+    labels:
+      - traefik.enable=false
 
   cross-seed:
     image: crossseed/cross-seed
@@ -421,6 +471,8 @@ services:
         condition: service_healthy
       qbittorrent:
         condition: service_healthy
+    labels:
+      - traefik.enable=false
 
   qbit_manage:
     container_name: qbit_manage
@@ -456,6 +508,8 @@ services:
     depends_on:
       qbittorrent:
         condition: service_healthy
+    labels:
+      - traefik.enable=false
 
   flaresolverr:
     # DockerHub mirror flaresolverr/flaresolverr:latest
@@ -472,3 +526,5 @@ services:
     healthcheck:
       <<: *healthcheck
       test: ["CMD", "curl", "-f", "http://localhost:8191"]
+    labels:
+      - traefik.enable=false
