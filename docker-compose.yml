@@ -466,6 +466,8 @@ services:
       - /mnt/storage:/data # this is optional dataDir path (for data-based matching) - will need to mirror your torrent client's path (like Arr's do)
       - /mnt/storage/cross-seeds:/cross-seeds
     command: daemon
+    ports:
+      - 2468:2468
     depends_on:
       prowlarr:
         condition: service_healthy
