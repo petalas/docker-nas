@@ -198,7 +198,7 @@ module.exports = {
      * "2w"
      * "3 days"
      */
-    rssCadence: undefined,
+    rssCadence: "30min",
     /**
      * Run searches on a schedule. Format: https://github.com/vercel/ms
      * Set to undefined or null to disable. Minimum of 1 day.
