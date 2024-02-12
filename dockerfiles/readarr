@@ -1,0 +1,21 @@
+FROM docker.io/node:16-alpine
+
+RUN apk add --upgrade --no-cache \
+    bash \
+    curl \
+    dotnet6 \ 
+    dotnet6-sdk \
+    git \
+    sqlite-dev
+
+RUN git clone --branch mass-rename --depth 1 https://github.com/petalas/Readarr.git /readarr
+
+WORKDIR /readarr
+
+RUN ./build.sh --backend -f net6.0 -r linux-musl-x64
+RUN ./build.sh --frontend --lint
+RUN ./build.sh --packages -f net6.0 -r linux-musl-x64
+
+EXPOSE 8787
+
+CMD ./_artifacts/linux-musl-x64/net6.0/Readarr/Readarr

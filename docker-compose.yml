@@ -133,6 +133,7 @@ services:
     labels:
       - traefik.enable=false
 
+
   plex:
     image: linuxserver/plex
     container_name: plex
@@ -224,7 +225,7 @@ services:
       - homepage.widget.url=http://192.168.1.102:32783
       - homepage.widget.key=${RADARR_API_KEY}
       - homepage.widget.enableQueue=true
-      
+
 
   sabnzbd:
     image: linuxserver/sabnzbd
@@ -314,6 +315,9 @@ services:
 
   readarr:
     image: lscr.io/linuxserver/readarr:develop
+    # build:
+    #   context: ./dockerfiles
+    #   dockerfile: ./readarr
     container_name: readarr
     <<: *common
     volumes:
