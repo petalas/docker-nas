@@ -560,3 +560,15 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:8191"]
     labels:
       - traefik.enable=false
+
+
+  filebrowser:
+    image: filebrowser/filebrowser
+    container_name: filebrowser
+    <<: *common
+    ports:
+      - 8888:80
+    volumes:
+      - /:/srv
+      - ./config/filebrowser/filebrowser.db:/database/filebrowser.db
+      - ./config/filebrowser/settings.json:/config/settings.json
