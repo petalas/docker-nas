@@ -194,6 +194,24 @@ services:
       - homepage.widget.key=${SONARR_API_KEY}
       - homepage.widget.enableQueue=true
 
+  nicotine:
+    image: sirjmann92/nicotineplus-proper:latest
+    container_name: nicotine
+    <<: *common
+    ports:
+      - 6565:6565
+      - 22344:22344
+    environment:
+      <<: *env
+      DARKMODE: true
+      LOGIN: ${SOULSEEK_LOGIN}
+      PASSW: ${SOULSEEK_PASSWORD}
+    volumes:
+      - ./config/nicotine:/root/.config/nicotine # (Optional) Save your config persistently
+      - ./config/nicotine/data:/root/.local/share/nicotine #(Optional) Store your logs, database, and history
+      - /mnt/storage/soulseek/downloads:/downloads
+      - /mnt/storage/music:/mnt/storage/music
+
   radarr:
     image: linuxserver/radarr
     container_name: radarr
