@@ -195,7 +195,7 @@ services:
       - homepage.widget.enableQueue=true
 
   nicotine:
-    image: sirjmann92/nicotineplus-proper:latest
+    image: npetalas/nicotineplus:xpra
     container_name: nicotine
     <<: *common
     ports:
@@ -209,8 +209,12 @@ services:
     volumes:
       - ./config/nicotine:/root/.config/nicotine # (Optional) Save your config persistently
       - ./config/nicotine/data:/root/.local/share/nicotine #(Optional) Store your logs, database, and history
-      - /mnt/storage/soulseek/downloads:/downloads
-      - /mnt/storage/music:/mnt/storage/music
+      - /mnt/storage/music:/music
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 2G
 
   radarr:
     image: linuxserver/radarr
