@@ -15,9 +15,16 @@ settings:
   nohardlinks_tag: noHL # Will set the tag of any torrents with no hardlinks.
   share_limits_tag: ~share_limit # Will add this tag when applying share limits to provide an easy way to filter torrents by share limit group/priority for each torrent
   ignoreTags_OnUpdate: # When running tag-update function, it will update torrent tags for a given torrent even if the torrent has at least one or more of the tags defined here. Otherwise torrents will not be tagged if tags exist.
-    - noHL
-    - issue
-    - cross-seed
+  - noHL
+  - issue
+  - cross-seed
+  share_limits_min_seeding_time_tag: MinSeedTimeNotReached
+  share_limits_min_num_seeds_tag: MinSeedsNotMet
+  share_limits_last_active_tag: LastActiveLimitNotReached
+  cross_seed_tag: cross-seed
+  cat_filter_completed: true
+  share_limits_filter_completed: true
+  tag_nohardlinks_filter_completed: true
 directory:
   # Do not remove these
   # Cross-seed var: </your/path/here/>  # Output directory of cross-seed
@@ -65,42 +72,62 @@ tracker:
     tag: other
 
 nohardlinks:
-  - movies
-  - tv
-  - music
+- movies
+- tv
+- music
 
 # FIXME
 share_limits:
+  MAM:
+    priority: 1
+    include_all_tags:
+    - MAM
+    max_ratio: -1
+    max_seeding_time: -1
+    cleanup: false
+  HDT:
+    priority: 2
+    include_all_tags:
+    - HDT
+    max_ratio: -1
+    max_seeding_time: -1
+    cleanup: false
+  cross-seed:
+    priority: 3
+    include_all_tags:
+    - cross-seed
+    max_seeding_time: 10200
+    cleanup: false
   # Control how torrent share limits are set depending on the priority of your grouping
   # Each torrent will be matched with the share limit group with the highest priority that meets the group filter criteria.
   # Each torrent can only be matched with one share limit group
   # This variable is mandatory and is a text defining the name of your grouping. This can be any string you want
   noHL:
     # <MANDATORY> priority: <int/float> # This is the priority of your grouping. The lower the number the higher the priority
-    priority: 1
+    priority: 4
     # <OPTIONAL> include_all_tags: <list> # Filter the group based on one or more tags. Multiple include_all_tags are checked with an AND condition
     # All tags defined here must be present in the torrent for it to be included in this group
     include_all_tags:
-      - noHL
+    - noHL
     # <OPTIONAL> include_any_tags: <list> # Filter the group based on one or more tags. Multiple include_any_tags are checked with an OR condition
     # Any tags defined here must be present in the torrent for it to be included in this group
     include_any_tags:
-      - noHL
+    - noHL
     # <OPTIONAL> exclude_all_tags: <list> # Filter by excluding one or more tags. Multiple exclude_all_tags are checked with an AND condition
     # This is useful to combine with the category filter to exclude one or more tags from an entire category
     # All tags defined here must be present in the torrent for it to be excluded in this group
     exclude_all_tags:
-      - Beyond-HD
+    - Beyond-HD
     # <OPTIONAL> exclude_any_tags: <list> # Filter by excluding one or more tags. Multiple exclude_any_tags are checked with an OR condition
     # This is useful to combine with the category filter to exclude one or more tags from an entire category
     # Any tags defined here must be present in the torrent for it to be excluded in this group
     exclude_any_tags:
-      - Beyond-HD
+    - Beyond-HD
     # <OPTIONAL> categories: <list> # Filter by including one or more categories. Multiple categories are checked with an OR condition
     # Since one torrent can only be associated with a single category, multiple categories are checked with an OR condition
     categories:
-      - RadarrComplete
-      - SonarrComplete
+    - RadarrComplete
+    - SonarrComplete
     # <OPTIONAL> max_ratio <float>: Will set the torrent Maximum share ratio until torrent is stopped from seeding/uploading.
     # Will default to -1 (no limit) if not specified for the group.
     max_ratio: 5.0
@@ -128,19 +155,6 @@ share_limits:
     # If the torrent has less number of seeds than the min_num_seeds, the share limits will be changed back to no limits and resume the torrent to continue seeding.
     # Will default to 0 if not specified for the group.
     min_num_seeds: 0
-  cross-seed:
-    priority: 2
-    include_all_tags:
-      - cross-seed
-    max_seeding_time: 10200
-    cleanup: false
-  PTP:
-    priority: 3
-    include_all_tags:
-      - PassThePopcorn
-    max_ratio: 2.0
-    max_seeding_time: 130000
-    cleanup: false
   default:
     priority: 999
     max_ratio: -1
@@ -173,12 +187,12 @@ orphaned:
   empty_after_x_days: 60
   # File patterns that will not be considered orphaned files. Handy for generated files that aren't part of the torrent but belong with the torrent's files
   exclude_patterns:
-    - "**/.DS_Store"
-    - "**/Thumbs.db"
-    - "**/@eaDir"
-    - /data/torrents/temp/**
-    - "**/*.!qB"
-    - "**/*_unpackerred"
+  - '**/.DS_Store'
+  - '**/Thumbs.db'
+  - '**/@eaDir'
+  - /data/torrents/temp/**
+  - '**/*.!qB'
+  - '**/*_unpackerred'
 webhooks:
   error:
   run_start:
