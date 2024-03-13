@@ -102,7 +102,7 @@ module.exports = {
      * To search for everything except season pack episodes (data-based)
      *    use (includeEpisodes: false, includeSingleEpisodes: true, includeNonVideos: true)
      */
-    includeNonVideos: false,
+    includeNonVideos: true,
     /**
      * fuzzy size match threshold
      * decimal value (0.02 = 2%)
