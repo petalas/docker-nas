@@ -194,52 +194,52 @@ services:
       - homepage.widget.key=${SONARR_API_KEY}
       - homepage.widget.enableQueue=true
 
-  nicotine:
-    image: npetalas/nicotineplus:xpra
-    container_name: nicotine
-    restart: unless-stopped
-    environment:
-      <<: *env
-      DARKMODE: true
-      LOGIN: ${SOULSEEK_LOGIN}
-      PASSW: ${SOULSEEK_PASSWORD}
-    volumes:
-      - ./config/nicotine:/root/.config/nicotine # (Optional) Save your config persistently
-      - ./config/nicotine/data:/root/.local/share/nicotine #(Optional) Store your logs, database, and history
-      - /mnt/storage/music:/music
-    deploy:
-      resources:
-        limits:
-          cpus: '0.5'
-          memory: 2G
-    network_mode: service:gluetun
-    depends_on:
-      gluetun:
-        condition: service_healthy
+  # nicotine:
+  #   image: npetalas/nicotineplus:xpra
+  #   container_name: nicotine
+  #   restart: unless-stopped
+  #   environment:
+  #     <<: *env
+  #     DARKMODE: true
+  #     LOGIN: ${SOULSEEK_LOGIN}
+  #     PASSW: ${SOULSEEK_PASSWORD}
+  #   volumes:
+  #     - ./config/nicotine:/root/.config/nicotine # (Optional) Save your config persistently
+  #     - ./config/nicotine/data:/root/.local/share/nicotine #(Optional) Store your logs, database, and history
+  #     - /mnt/storage/music:/music
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '0.5'
+  #         memory: 2G
+  #   network_mode: service:gluetun
+  #   depends_on:
+  #     gluetun:
+  #       condition: service_healthy
 
-  gluetun:
-    image: qmcgaw/gluetun
-    container_name: gluetun
-    cap_add:
-      - NET_ADMIN
-    devices:
-      - /dev/net/tun:/dev/net/tun
-    ports:
-      - 8000:8000 # control server
-      - 6565:6565 # nicotine+
-      - ${VPN_FORWARDED_PORT}:${VPN_FORWARDED_PORT}
-    volumes:
-      - ./config/gluetun:/gluetun
-    environment:
-      <<: *env
-      VPN_SERVICE_PROVIDER: private internet access
-      OPENVPN_USER: ${VPN_USER}
-      OPENVPN_PASSWORD: ${VPN_PASSWORD}
-      SERVER_REGIONS: UK London
-      VPN_PORT_FORWARDING: on
-      PRIVATE_INTERNET_ACCESS_OPENVPN_ENCRYPTION_PRESET: 'normal' # strong|normal|none, default 'strong'
-    networks:
-     home:
+  # gluetun:
+  #   image: qmcgaw/gluetun
+  #   container_name: gluetun
+  #   cap_add:
+  #     - NET_ADMIN
+  #   devices:
+  #     - /dev/net/tun:/dev/net/tun
+  #   ports:
+  #     - 8000:8000 # control server
+  #     - 6565:6565 # nicotine+
+  #     - ${VPN_FORWARDED_PORT}:${VPN_FORWARDED_PORT}
+  #   volumes:
+  #     - ./config/gluetun:/gluetun
+  #   environment:
+  #     <<: *env
+  #     VPN_SERVICE_PROVIDER: private internet access
+  #     OPENVPN_USER: ${VPN_USER}
+  #     OPENVPN_PASSWORD: ${VPN_PASSWORD}
+  #     SERVER_REGIONS: UK London
+  #     VPN_PORT_FORWARDING: on
+  #     PRIVATE_INTERNET_ACCESS_OPENVPN_ENCRYPTION_PRESET: 'normal' # strong|normal|none, default 'strong'
+  #   networks:
+  #    home:
 
   radarr:
     image: linuxserver/radarr
