@@ -30,4 +30,6 @@ config/homepage/logs
 !config/traefik
 config/traefik/acme.json
 
+config/vpn
+
 .env

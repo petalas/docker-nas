@@ -620,31 +620,37 @@ services:
       - ./config/filebrowser/filebrowser.db:/database/filebrowser.db
       - ./config/filebrowser/settings.json:/config/settings.json
 
-  wg-easy:
+  vpn:
     image: ghcr.io/wg-easy/wg-easy
-    container_name: wg-easy
+    container_name: vpn
     <<: *common
     environment:
       <<: *env
       # WG_HOST: wg-easy.lab.petalas.dev
-      WG_HOST: 140.228.73.215
       PASSWORD: $WG_PASSWORD
+      PORT: 54 # attempt to bypass restrictions on some networks (normally for DNS)
+      WG_DEFAULT_DNS: 192.168.1.10
+      WG_HOST: 140.228.73.215
       WG_MTU: 1500
+      WG_PORT: 53
     volumes:
-      - ./config/wg-easy:/etc/wireguard
+      - ./config/vpn:/etc/wireguard
     ports:
-      - "51820:51820/udp" # WG port
-      - "51821:51821/tcp" # web UI port
+      - "53:51820/udp" # WG port (will always listen to 51820 inside the container, env var is for the generated config)
+      - "54:54/tcp" # web UI port
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
     sysctls:
       - net.ipv4.ip_forward=1
-      - net.ipv4.conf.all.src_valid_mark=1
+    healthcheck:
+      <<: *healthcheck
+      # not a real healthcheck, only confirms there's a node process running (server.js)
+      test: ["CMD-SHELL", "grep node /proc/*[0-9]*/status || exit 1"]
     # labels:
     #     - traefik.enable=true
-    #     - traefik.http.routers.wg-easy.service=wg-easy
-    #     - traefik.http.routers.wg-easy.entrypoints=websecure
-    #     - traefik.http.routers.wg-easy.rule=Host(`wg-easy.lab.petalas.dev`)
-    #     - traefik.http.routers.wg-easy.tls=true
-    #     - traefik.http.services.wg-easy.loadbalancer.server.port=51821
+    #     - traefik.http.routers.vpn.service=vpn
+    #     - traefik.http.routers.vpn.entrypoints=websecure
+    #     - traefik.http.routers.vpn.rule=Host(`vpn.lab.petalas.dev`)
+    #     - traefik.http.routers.vpn.tls=true
+    #     - traefik.http.services.vpn.loadbalancer.server.port=54
