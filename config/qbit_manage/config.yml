@@ -25,6 +25,7 @@ settings:
   cat_filter_completed: true
   share_limits_filter_completed: true
   tag_nohardlinks_filter_completed: true
+  force_retag_all: false
 directory:
   # Do not remove these
   # Cross-seed var: </your/path/here/>  # Output directory of cross-seed
