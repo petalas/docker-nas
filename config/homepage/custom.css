@@ -2,7 +2,9 @@
     margin-bottom: 0.5rem;
 } */
 
-#inner_wrapper > div {
+
+/* Uncomment the bellow block to put the bookmarks on the side */
+/* #inner_wrapper > div {
     display: grid;
     grid-template-columns: 4fr 1fr;
     grid-template-rows: auto;
@@ -29,4 +31,15 @@
 
 .bookmark > a {
     margin: .2rem;
+} */
+/* end of side bookmarks hack */
+
+/* 
+there's a reload icon that can't be hidden
+https://github.com/gethomepage/homepage/discussions/1732
+*/
+body {
+    #footer {
+        display: none;
+    }
 }

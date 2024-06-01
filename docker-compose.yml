@@ -175,8 +175,8 @@ services:
       - /mnt/storage/music:/music
     labels:
       - traefik.enable=false
-      - homepage.weight=1
-      - homepage.group=calendar
+      - homepage.group=brr
+      - homepage.weight=2
       - homepage.name=plex
       - homepage.icon=plex.svg
       - homepage.href=http://192.168.1.102:32400
@@ -319,7 +319,7 @@ services:
     labels:
       - traefik.enable=false
       - homepage.weight=3
-      - homepage.group=network
+      - homepage.group=downloaders
       - homepage.name=sabnzbd
       - homepage.icon=sabnzbd.svg
       - homepage.href=http://192.168.1.102:32781
@@ -349,7 +349,7 @@ services:
     labels:
       - traefik.enable=false
       - homepage.weight=2
-      - homepage.group=network
+      - homepage.group=downloaders
       - homepage.name=qbittorrent
       - homepage.icon=qbittorrent.svg
       - homepage.href=http://192.168.1.102:8080
@@ -443,6 +443,7 @@ services:
     labels:
       - traefik.enable=false
       - homepage.group=brr
+      - homepage.weight=3
       - homepage.name=prowlarr
       - homepage.icon=prowlarr.svg
       - homepage.href=http://192.168.1.102:32787
@@ -543,6 +544,7 @@ services:
     labels:
       - traefik.enable=false
       - homepage.group=brr
+      - homepage.weight=1
       - homepage.name=autobrr
       - homepage.icon=autobrr.svg
       - homepage.href=http://192.168.1.102:7474

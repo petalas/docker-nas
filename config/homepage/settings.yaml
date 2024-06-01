@@ -4,17 +4,20 @@
 
 title: zeus
 # background:
-#   # image: https://i.redd.it/cq0wbwwjc6ja1.png
-#   # image: https://i.redd.it/alxas78kq5ta1.jpg
-#   image: https://preview.redd.it/d09q2vfldwma1.jpg?auto=webp&s=3536a3d58cdf28f73949ec4dc6a8ec64fb8d7b53
-#   blur: none # sm, "", md, xl... see https://tailwindcss.com/docs/backdrop-blur
-#   saturate: 100 # 0, 50, 100... see https://tailwindcss.com/docs/backdrop-saturate
-#   brightness: 100 # 0, 50, 75... see https://tailwindcss.com/docs/backdrop-brightness
-#   opacity: 20 # 0-100
+  # image: https://i.redd.it/cq0wbwwjc6ja1.png
+  # image: https://i.redd.it/alxas78kq5ta1.jpg
+  # image: https://preview.redd.it/d09q2vfldwma1.jpg?auto=webp&s=3536a3d58cdf28f73949ec4dc6a8ec64fb8d7b53
+  # blur: none # sm, "", md, xl... see https://tailwindcss.com/docs/backdrop-blur
+  # saturate: 100 # 0, 50, 100... see https://tailwindcss.com/docs/backdrop-saturate
+  # brightness: 50 # 0, 50, 75... see https://tailwindcss.com/docs/backdrop-brightness
+  # opacity: 0 # 0-100
 
-cardBlur: xl
+# cardBlur: xl
 theme: dark
-color: catppuccin
+color: zinc
+# color: catppuccin
+
+# Supported colors are: slate, gray, zinc, neutral, stone, amber, yellow, lime, green, emerald, teal, cyan, sky, blue, indigo, violet, purple, fuchsia, pink, rose, red, white
 
 # headerStyle: boxed
 headerStyle: underlined
@@ -28,10 +31,14 @@ layout:
     header: false
     style: row
     columns: 4
-  network:
+  pihole-kuma:
+      header: false
+      style: row
+      columns: 2
+  downloaders:
     header: false
     style: row
-    columns: 3
+    columns: 2
   media:
     header: false
     style: row
@@ -39,14 +46,16 @@ layout:
   brr:
     header: false
     style: row
-    columns: 2
+    columns: 3
   calendar:
     header: false
     style: row
-    columns: 2
+    columns: 1
 
 providers:
   openweathermap: openweathermapapikey
   weatherapi: weatherapiapikey
 
 hideVersion: true
+showStats: false
+target: _blank
