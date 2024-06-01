@@ -52,7 +52,7 @@ services:
       - traefik.http.routers.traefik.service=api@internal
       - traefik.http.routers.traefik.tls.certresolver=cloudflare
       - traefik.http.routers.traefik.tls.domains[0].main=lab.petalas.dev
-      - traefik.http.routers.traefik.tls.domains[0].sans=*.lab.petalas.dev
+      - traefik.http.routers.traefik.tls.domains[0].sans=*.lab.petalas.dev # TODO: ssl cert that covers these too
       - traefik.http.services.traefik.loadbalancer.server.port=443
 
   whoami:
