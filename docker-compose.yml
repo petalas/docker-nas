@@ -666,6 +666,20 @@ services:
       - ./config/filebrowser/filebrowser.db:/database/filebrowser.db
       - ./config/filebrowser/settings.json:/config/settings.json
 
+  speedtest:
+    image: lscr.io/linuxserver/speedtest-tracker:latest
+    container_name: speedtest
+    <<: *common
+    environment:
+      <<: *env
+      DB_CONNECTION: sqlite
+    volumes:
+      - ./config/speedtest:/config
+    ports:
+      - 7070:80
+    labels:
+      - homepage.group=speedtest
+
   vpn:
     image: ghcr.io/wg-easy/wg-easy
     container_name: vpn
