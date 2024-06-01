@@ -38,11 +38,13 @@
   - cpu:
         widget:
           type: glances
+          version: 4
           url: http://192.168.1.102:61208
           metric: cpu
   - memory:
       widget:
         type: glances
+        version: 4
         url: http://192.168.1.102:61208
         # metric: fs:/mnt/storage
         metric: memory
@@ -50,12 +52,14 @@
   - enp6s18:
       widget:
         type: glances
+        version: 4
         url: http://192.168.1.102:61208
         metric: network:enp6s18
         chart: true
   - /mnt/storage:
       widget:
         type: glances
+        version: 4
         url: http://192.168.1.102:61208
         # metric: disk:sda
         metric: fs:/mnt/storage
