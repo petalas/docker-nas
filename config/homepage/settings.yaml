@@ -35,10 +35,6 @@ layout:
       header: false
       style: row
       columns: 2
-  speedtest:
-    header: false
-    style: row
-    columns: 1
   downloaders:
     header: false
     style: row
