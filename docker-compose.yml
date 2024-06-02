@@ -48,11 +48,10 @@ services:
       - traefik.http.middlewares.admin.basicauth.users=${TRAEFIK_BASIC_AUTH_USER}:${TRAEFIK_BASIC_AUTH_PASSWORD}
       - traefik.http.routers.traefik.entrypoints=websecure
       - traefik.http.routers.traefik.middlewares=admin
-      - traefik.http.routers.traefik.rule=Host(`traefik.lab.petalas.dev`)
+      - traefik.http.routers.traefik.rule=Host(`traefik.petalas.dev`)
       - traefik.http.routers.traefik.service=api@internal
       - traefik.http.routers.traefik.tls.certresolver=cloudflare
-      - traefik.http.routers.traefik.tls.domains[0].main=lab.petalas.dev
-      - traefik.http.routers.traefik.tls.domains[0].sans=*.lab.petalas.dev # TODO: ssl cert that covers these too
+      - traefik.http.routers.traefik.tls.domains[0].sans=*.petalas.dev
       - traefik.http.services.traefik.loadbalancer.server.port=443
 
   whoami:
@@ -63,7 +62,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.whoami.entrypoints=websecure
-      - traefik.http.routers.whoami.rule=Host(`whoami.lab.petalas.dev`)
+      - traefik.http.routers.whoami.rule=Host(`whoami.petalas.dev`)
       - traefik.http.routers.whoami.service=whoami
       - traefik.http.routers.whoami.tls=true
       - traefik.http.services.whoami.loadbalancer.server.port=80
@@ -99,7 +98,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.kuma.entrypoints=websecure
-      - traefik.http.routers.kuma.rule=Host(`kuma.lab.petalas.dev`)
+      - traefik.http.routers.kuma.rule=Host(`kuma.petalas.dev`)
       - traefik.http.routers.kuma.service=kuma
       - traefik.http.routers.kuma.tls=true
       - traefik.http.services.kuma.loadbalancer.server.port=3001
@@ -110,7 +109,7 @@ services:
     <<: *common
     environment:
       <<: *env
-      PROXY_DOMAIN: code-server.lab.petalas.dev
+      PROXY_DOMAIN: code-server.petalas.dev
       DEFAULT_WORKSPACE: /git
       PASSWORD: ${CODE_SERVER_PASSWORD}
     volumes:
@@ -126,7 +125,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.code-server.service=code-server
       - traefik.http.routers.code-server.entrypoints=websecure
-      - traefik.http.routers.code-server.rule=Host(`code-server.lab.petalas.dev`)
+      - traefik.http.routers.code-server.rule=Host(`code-server.petalas.dev`)
       - traefik.http.routers.code-server.tls=true
       - traefik.http.services.code-server.loadbalancer.server.port=8443
 
@@ -151,7 +150,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.homepage.entrypoints=websecure
-      - traefik.http.routers.homepage.rule=Host(`lab.petalas.dev`)
+      - traefik.http.routers.homepage.rule=Host(`dashboard.petalas.dev`)
       - traefik.http.routers.homepage.service=homepage
       - traefik.http.routers.homepage.tls=true
       - traefik.http.services.homepage.loadbalancer.server.port=3000

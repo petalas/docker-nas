@@ -43,7 +43,7 @@
         url: http://pi.hole
   - uptime kuma:
       icon: uptime-kuma.svg
-      href: http://192.168.1.102:3001
+      href: https://kuma.petalas.dev/dashboard
       widget:
         type: uptimekuma
         url: http://192.168.1.102:3001
