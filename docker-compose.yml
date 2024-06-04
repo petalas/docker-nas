@@ -327,10 +327,37 @@ services:
       - homepage.widget.key=${SABNZBD_API_KEY}
       - homepage.widget.refreshInterval=1000
 
-  qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent:4.6.3-r0-ls308
-    container_name: qbittorrent
+  vpn:
+    image: thrnz/docker-wireguard-pia
+    container_name: vpn
     <<: *common
+    volumes:
+      - ./config/pia:/pia # Auth token is stored here
+      - pia-shared:/pia-shared # If enabled, the forwarded port is dumped to /pia-shared/port.dat for potential use in other containers
+    environment:
+      # The following env vars are required:
+      - LOC=uk
+      - USER=${VPN_USER}
+      - PASS=${VPN_PASSWORD}
+      # The rest are optional:
+      - LOCAL_NETWORK=192.168.1.0/24
+      - KEEPALIVE=25
+      - VPNDNS=8.8.8.8,8.8.4.4
+      - PORT_FORWARDING=1
+      - DEBUG=1
+    ports:
+      - 8080:8080 # for qbittorrent
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+      - net.ipv6.conf.default.disable_ipv6=1
+      - net.ipv6.conf.all.disable_ipv6=1
+      - net.ipv6.conf.lo.disable_ipv6=1
+    cap_add:
+      - NET_ADMIN
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:4.6.5
+    container_name: qbittorrent
     environment:
       <<: *env
       WEBUI_PORT: 8080
@@ -338,13 +365,17 @@ services:
     volumes:
       - ./config/qbittorrent:/config
       - /mnt/storage:/data
-    ports:
-      - 8080:8080
-      - 16881:16881
-      - 16881:16881/udp
+      - pia-shared:/pia-shared:ro
+    network_mode: "service:vpn"
+    restart: unless-stopped
     healthcheck:
       <<: *healthcheck
       test: [ "CMD-SHELL", "curl -f http://localhost:8080 || exit 1" ]
+    security_opt:
+      - no-new-privileges:true
+    depends_on:
+      vpn:
+        condition: service_healthy
     labels:
       - traefik.enable=false
       - homepage.weight=2
@@ -664,3 +695,7 @@ services:
       - /:/srv
       - ./config/filebrowser/filebrowser.db:/database/filebrowser.db
       - ./config/filebrowser/settings.json:/config/settings.json
+
+volumes:
+  pia:
+  pia-shared:
