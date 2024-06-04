@@ -328,20 +328,40 @@ services:
       - homepage.widget.refreshInterval=1000
 
   qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent:4.6.3-r0-ls308
+    image: ghcr.io/hotio/qbittorrent:release-4.6.5
     container_name: qbittorrent
     <<: *common
     environment:
       <<: *env
-      WEBUI_PORT: 8080
-      DOCKER_MODS: ghcr.io/themepark-dev/theme.park:qbittorrent
+      VPN_ENABLED: true
+      VPN_CONF: wg0
+      VPN_PROVIDER: pia
+      VPN_LAN_NETWORK: 192.168.1.0/24
+      VPN_LAN_LEAK_ENABLED: false
+      VPN_EXPOSE_PORTS_ON_LAN:
+      VPN_AUTO_PORT_FORWARD: true
+      VPN_AUTO_PORT_FORWARD_TO_PORTS:
+      VPN_KEEP_LOCAL_DNS: true
+      VPN_FIREWALL_TYPE: auto
+      VPN_HEALTHCHECK_ENABLED: true
+      VPN_PIA_PREFERRED_REGION: uk
+      VPN_PIA_USER: ${VPN_USER}
+      VPN_PIA_PASS: ${VPN_PASSWORD}
+      VPN_PIA_DIP_TOKEN: no
+      VPN_PIA_PORT_FORWARD_PERSIST: true
+      PRIVOXY_ENABLED: false
+      UNBOUND_ENABLED: false
+      WEBUI_PORTS: 8080/tcp,8080/udp
+    cap_add:
+      - NET_ADMIN
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1 #
+      - net.ipv6.conf.all.disable_ipv6=1 #
     volumes:
       - ./config/qbittorrent:/config
       - /mnt/storage:/data
     ports:
       - 8080:8080
-      - 16881:16881
-      - 16881:16881/udp
     healthcheck:
       <<: *healthcheck
       test: [ "CMD-SHELL", "curl -f http://localhost:8080 || exit 1" ]
