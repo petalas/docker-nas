@@ -8,6 +8,10 @@ config/recyclarr/*
 config/cross-seed/*
 !config/cross-seed/config.js
 
+!config/qbittorrent
+config/qbittorrent/*
+!config/qbittorrent/notes.txt
+
 !config/qbit_manage
 config/qbit_manage/*
 !config/qbit_manage/config.yml

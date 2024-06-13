@@ -1,0 +1,2 @@
+To manually unpack multi-part rar archive: `7z x whatever.rar`
+Might need to `sudo apt install p7zip-full -y`
