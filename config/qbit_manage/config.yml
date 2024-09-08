@@ -27,6 +27,7 @@ settings:
   tag_nohardlinks_filter_completed: true
   force_retag_all: false
   cat_update_all: true
+  force_auto_tmm_ignore_tags: []
 directory:
   # Do not remove these
   # Cross-seed var: </your/path/here/>  # Output directory of cross-seed
