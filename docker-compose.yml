@@ -675,7 +675,7 @@ services:
       - traefik.enable=false
 
   filebrowser:
-    image: filebrowser/filebrowser
+    image: filebrowser/filebrowser:s6
     container_name: filebrowser
     <<: *common
     ports:
