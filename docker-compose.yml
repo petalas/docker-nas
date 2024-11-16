@@ -328,7 +328,7 @@ services:
       - homepage.widget.refreshInterval=1000
 
   qbittorrent:
-    image: ghcr.io/hotio/qbittorrent:release-4.6.5
+    image: ghcr.io/hotio/qbittorrent:release-5.0.1
     container_name: qbittorrent
     <<: *common
     environment:
