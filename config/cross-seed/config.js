@@ -7,7 +7,7 @@ module.exports = {
      * Pause at least this much in between each search. Higher is safer.
      * It is not recommended to set this to less than 2 seconds.
      */
-    delay: 2,
+    delay: 30,
     /**
      * List of Torznab URLs.
      * For Jackett, click "Copy RSS feed"
@@ -116,7 +116,7 @@ module.exports = {
      * "2w"
      * "3 days"
      */
-    excludeOlder: undefined,
+    excludeOlder: "9w",
     /**
      * Exclude torrents which have been searched
      * more recently than this long ago.
@@ -125,7 +125,7 @@ module.exports = {
      * "2w"
      * "3 days"
      */
-    excludeRecentSearch: undefined,
+    excludeRecentSearch: "3w",
     /**
      * With "inject" you need to set up one of the below clients.
      * Options: "save", "inject"
@@ -208,7 +208,7 @@ module.exports = {
      * "2w"
      * "3 days"
      */
-    searchCadence: "2w",
+    searchCadence: "1w",
     /**
      * Fail snatch requests that haven't responded after this long.
      * Set to null for an infinite timeout.
