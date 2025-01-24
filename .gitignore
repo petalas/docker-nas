@@ -36,4 +36,16 @@ config/traefik/acme.json
 
 config/vpn
 
+!config/plex
+config/plex/*
+!config/plex/Library
+config/plex/Library/*
+!config/plex/Library/Application Support
+config/plex/Library/Application Support/*
+!config/plex/Library/Application Support/Plex Media Server
+config/plex/Library/Application Support/Plex Media Server/*
+!config/plex/Library/Application Support/Plex Media Server/Plug-ins
+config/plex/Library/Application Support/Plex Media Server/Plug-ins/*
+!config/plex/Library/Application Support/Plex Media Server/Plug-ins/Audnexus.bundle
+
 .env
