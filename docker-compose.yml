@@ -172,6 +172,7 @@ services:
       - /mnt/storage/tv:/tv
       - /mnt/storage/movies:/movies
       - /mnt/storage/music:/music
+      - /mnt/storage/books:/books
     labels:
       - traefik.enable=false
       - homepage.group=brr
