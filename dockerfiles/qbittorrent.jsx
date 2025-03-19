@@ -1,55 +1,72 @@
-import {useTranslation} from "next-i18next";
-
+import { useTranslation } from "next-i18next";
 import Container from "components/services/widget/container";
 import Block from "components/services/widget/block";
+
+import QueueEntry from "../../components/widgets/queue/queueEntry";
+
 import useWidgetAPI from "utils/proxy/use-widget-api";
 
-export default function Component({service}) {
-    const {t} = useTranslation();
+export default function Component({ service }) {
+  const { t } = useTranslation();
+  const { widget } = service;
+  const {refreshInterval = 1000} = widget;
 
-    const {widget} = service;
-    const {refreshInterval = 1000} = widget;
+  const { data: torrentData, error: torrentError } = useWidgetAPI(widget, "torrents", 
+    {refreshInterval: Math.max(1000, refreshInterval)}
+  );
 
-    const {data: torrentData, error: torrentError} = useWidgetAPI(widget, "torrents/info",
-        {refreshInterval: Math.max(1000, refreshInterval)}
-    );
+  if (torrentError) {
+    return <Container service={service} error={torrentError} />;
+  }
 
-    if (torrentError) {
-        return <Container service={service} error={torrentError} />;
-    }
-
-    if (!torrentData) {
-        return (
-            <Container service={service}>
-                <Block label="qbittorrent.leech" />
-                <Block label="qbittorrent.download" />
-                <Block label="qbittorrent.seed" />
-                <Block label="qbittorrent.upload" />
-            </Container>
-        );
-    }
-
-    let rateDl = 0;
-    let rateUl = 0;
-    let completed = 0;
-
-    for (let i = 0; i < torrentData.length; i += 1) {
-        const torrent = torrentData[i];
-        rateDl += torrent.dlspeed;
-        rateUl += torrent.upspeed;
-        if (torrent.progress === 1) {
-            completed += 1;
-        }
-    }
-
-    const leech = torrentData.length - completed;
-
+  if (!torrentData) {
     return (
-        <Container service={service}>
-            <Block label="qbittorrent.leech" value={t("common.number", {value: leech})} />
-            <Block label="qbittorrent.download" value={t("common.bibyterate", {value: rateDl, decimals: 1})} />
-            <Block label="qbittorrent.seed" value={t("common.number", {value: completed})} />
-            <Block label="qbittorrent.upload" value={t("common.bibyterate", {value: rateUl, decimals: 1})} />
-        </Container>
+      <Container service={service}>
+        <Block label="qbittorrent.leech" />
+        <Block label="qbittorrent.download" />
+        <Block label="qbittorrent.seed" />
+        <Block label="qbittorrent.upload" />
+      </Container>
     );
+  }
+
+  let rateDl = 0;
+  let rateUl = 0;
+  let completed = 0;
+  const leechTorrents = [];
+
+  for (let i = 0; i < torrentData.length; i += 1) {
+    const torrent = torrentData[i];
+    rateDl += torrent.dlspeed;
+    rateUl += torrent.upspeed;
+    if (torrent.progress === 1) {
+      completed += 1;
+    }
+    if (torrent.state.includes("DL") || torrent.state === "downloading") {
+      leechTorrents.push(torrent);
+    }
+  }
+
+  const leech = torrentData.length - completed;
+
+  return (
+    <>
+      <Container service={service}>
+        <Block label="qbittorrent.leech" value={t("common.number", { value: leech })} />
+        <Block label="qbittorrent.download" value={t("common.bibyterate", { value: rateDl, decimals: 1 })} />
+        <Block label="qbittorrent.seed" value={t("common.number", { value: completed })} />
+        <Block label="qbittorrent.upload" value={t("common.bibyterate", { value: rateUl, decimals: 1 })} />
+      </Container>
+      {widget?.enableLeechProgress &&
+        leechTorrents.map((queueEntry) => (
+          <QueueEntry
+            progress={queueEntry.progress * 100}
+            timeLeft={t("common.duration", { value: queueEntry.eta })}
+            title={queueEntry.name}
+            activity={queueEntry.state}
+            key={`${queueEntry.name}-${queueEntry.amount_left}`}
+          />
+        ))}
+    </>
+  );
 }

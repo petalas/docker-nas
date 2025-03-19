@@ -1,9 +1,8 @@
-import { useContext, Fragment } from "react";
-import { IoColorPalette } from "react-icons/io5";
-import { Popover, Transition } from "@headlessui/react";
+import {Popover, Transition} from "@headlessui/react";
 import classNames from "classnames";
-
-import { ColorContext } from "utils/contexts/color";
+import {Fragment, useContext} from "react";
+import {IoColorPalette} from "react-icons/io5";
+import {ColorContext} from "utils/contexts/color";
 
 const colors = [
   "slate",
@@ -32,7 +31,7 @@ const colors = [
 ];
 
 export default function ColorToggle() {
-  const { color: active, setColor } = useContext(ColorContext);
+  const {color: active, setColor} = useContext(ColorContext);
 
   if (!active) {
     return null;

@@ -36,11 +36,14 @@
 - pihole-kuma:
   - pihole:
       weight: 1
-      href: http://pi.hole/admin/
+      href: http://pi.hole:8080/admin/
       icon: pi-hole.svg
       widget:
         type: pihole
-        url: http://pi.hole
+        url: http://pi.hole:8080
+        version: 6 # required if running v6 or higher, defaults to 5
+        key: "{{HOMEPAGE_VAR_PIHOLE_API_KEY}}" # optional, in v6 can be your password or app password
+
   - uptime kuma:
       icon: uptime-kuma.svg
       href: https://kuma.petalas.dev/dashboard

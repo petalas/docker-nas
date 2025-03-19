@@ -1,5 +1,5 @@
 # FROM ghcr.io/gethomepage/homepage:latest
-FROM docker.io/node:18-alpine
+FROM docker.io/node:22-alpine
 
 # install general dependencies
 RUN apk add --no-cache git libc6-compat su-exec
@@ -23,9 +23,9 @@ COPY theme.css /app/src/styles/theme.css
 
 # build
 SHELL ["/bin/ash", "-xeo", "pipefail", "-c"]
-RUN npm run telemetry \
+RUN pnpm run telemetry \
   && mkdir config \
-  && npm run build
+  && pnpm run build
 
 # server.js is generated during the build in /app/.next/standalone
 RUN cp -r /app/.next/standalone/server.js ./

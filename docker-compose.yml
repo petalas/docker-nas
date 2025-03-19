@@ -136,6 +136,9 @@ services:
       dockerfile: ./homepage
     container_name: homepage
     restart: unless-stopped
+    environment:
+      HOMEPAGE_ALLOWED_HOSTS: dashboard.petalas.dev
+      HOMEPAGE_VAR_PIHOLE_API_KEY: ${HOMEPAGE_VAR_PIHOLE_API_KEY}
     healthcheck:
       <<: *healthcheck
       test: [ "CMD-SHELL", "exit 0" ] # TODO: figure out what kind of healthcheck we can do
