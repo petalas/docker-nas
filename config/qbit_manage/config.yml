@@ -32,6 +32,7 @@ settings:
   tag_stalled_torrents: true
   rem_unregistered_ignore_list: []
   rem_unregistered_filter_completed: false
+  stalled_tag: stalledDL
 directory:
   # Do not remove these
   # Cross-seed var: </your/path/here/>  # Output directory of cross-seed
