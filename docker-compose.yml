@@ -152,7 +152,7 @@ services:
     container_name: homepage
     restart: unless-stopped
     environment:
-      HOMEPAGE_ALLOWED_HOSTS: dashboard.petalas.dev
+      HOMEPAGE_ALLOWED_HOSTS: dashboard.petalas.dev,192.168.1.102:3000
       HOMEPAGE_VAR_PIHOLE_API_KEY: ${HOMEPAGE_VAR_PIHOLE_API_KEY}
     healthcheck:
       <<: *healthcheck
@@ -432,7 +432,7 @@ services:
       - homepage.widget.key=${LIDARR_API_KEY}
 
   readarr:
-    image: lscr.io/linuxserver/readarr:develop
+    image: linuxserver/readarr:0.4.18-develop # hardcoding version because it is deprecated
     # build:
     #   context: ./dockerfiles
     #   dockerfile: ./readarr
