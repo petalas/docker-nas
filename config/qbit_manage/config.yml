@@ -34,6 +34,8 @@ settings:
   rem_unregistered_filter_completed: false
   stalled_tag: stalledDL
   rem_unregistered_grace_minutes: 10
+  private_tag:
+  rem_unregistered_max_torrents: 10
 directory:
   # Do not remove these
   # Cross-seed var: </your/path/here/>  # Output directory of cross-seed
