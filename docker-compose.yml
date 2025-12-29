@@ -347,7 +347,7 @@ services:
       - homepage.widget.refreshInterval=1000
 
   qbittorrent:
-    image: ghcr.io/hotio/qbittorrent:release-5.1.2
+    image: ghcr.io/hotio/qbittorrent:release-5.1.4
     container_name: qbittorrent
     <<: *common
     environment:
@@ -359,7 +359,7 @@ services:
       VPN_LAN_LEAK_ENABLED: false
       VPN_EXPOSE_PORTS_ON_LAN:
       VPN_AUTO_PORT_FORWARD: true
-      VPN_AUTO_PORT_FORWARD_TO_PORTS:
+      VPN_PORT_REDIRECTS:
       VPN_KEEP_LOCAL_DNS: true
       VPN_FIREWALL_TYPE: auto
       VPN_HEALTHCHECK_ENABLED: true
@@ -396,6 +396,15 @@ services:
       - homepage.widget.username=${QBIT_USER}
       - homepage.widget.password=${QBIT_PASS}
       - homepage.widget.refreshInterval=1000
+
+  qui:
+    image: ghcr.io/autobrr/qui:latest
+    container_name: qui
+    <<: *common
+    ports:
+      - 7476:7476
+    volumes:
+      - ./config/qui:/config
 
   lidarr:
     image: linuxserver/lidarr
