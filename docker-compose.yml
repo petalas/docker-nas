@@ -352,6 +352,7 @@ services:
     <<: *common
     environment:
       <<: *env
+      MAM_ID: ${MAM_ID}
       VPN_ENABLED: true
       VPN_CONF: wg0
       VPN_PROVIDER: pia
@@ -379,6 +380,7 @@ services:
     volumes:
       - ./config/qbittorrent:/config
       - /mnt/storage:/data
+      - ./scripts/mam-seedbox-update:/etc/cont-init.d/99-mam-seedbox-update
     ports:
       - 8080:8080
     healthcheck:

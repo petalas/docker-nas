@@ -1,0 +1,56 @@
+#!/command/with-contenv bash
+
+MAM_COOKIES=/config/mam.cookies
+MAM_LOG=/config/mam-seedbox.log
+MAM_URL=https://t.myanonamouse.net/json/dynamicSeedbox.php
+MAM_UPDATER=/config/mam-update.sh
+MAX_VPN_WAIT=300  # give up waiting for VPN after 5 minutes
+
+log() {
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> "${MAM_LOG}"
+}
+
+# Write updater script that cron will call
+cat > "${MAM_UPDATER}" <<'SCRIPT'
+#!/bin/bash
+MAM_COOKIES=/config/mam.cookies
+MAM_LOG=/config/mam-seedbox.log
+MAM_URL=https://t.myanonamouse.net/json/dynamicSeedbox.php
+
+response=$(curl -s -w "\n%{http_code}" -c "${MAM_COOKIES}" -b "${MAM_COOKIES}" "${MAM_URL}" 2>&1)
+http_code=$(echo "${response}" | tail -1)
+body=$(echo "${response}" | sed '$d')
+
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] cron (${http_code}): ${body}" >> "${MAM_LOG}"
+SCRIPT
+chmod +x "${MAM_UPDATER}"
+
+# Install hourly crontab and start crond
+echo "0 * * * * ${MAM_UPDATER}" | crontab -
+crond -b -l 8
+log "init: crond started with hourly MAM update"
+
+# Wait for VPN tunnel, then bootstrap cookie jar and update MAM seedbox IP
+(
+  elapsed=0
+  until ip link show wg0 2>/dev/null | grep -q "UP"; do
+    elapsed=$((elapsed + 5))
+    if [ "${elapsed}" -ge "${MAX_VPN_WAIT}" ]; then
+      log "init: wg0 not up after ${MAX_VPN_WAIT}s, giving up"
+      exit 1
+    fi
+    sleep 5
+  done
+
+  # wg0 is up but give it a moment to establish routing
+  sleep 5
+
+  vpn_ip=$(curl -s --max-time 10 https://icanhazip.com/)
+  log "init: VPN is up (wg0 UP, IP: ${vpn_ip}), running initial MAM seedbox update"
+
+  # First call bootstraps the cookie jar with the mam_id cookie
+  response=$(curl -s -w "\n%{http_code}" -c "${MAM_COOKIES}" -b "mam_id=${MAM_ID}" "${MAM_URL}" 2>&1)
+  http_code=$(echo "${response}" | tail -1)
+  body=$(echo "${response}" | sed '$d')
+  log "init (${http_code}): ${body}"
+) &
