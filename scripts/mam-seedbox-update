@@ -17,9 +17,15 @@ MAM_COOKIES=/config/mam.cookies
 MAM_LOG=/config/mam-seedbox.log
 MAM_URL=https://t.myanonamouse.net/json/dynamicSeedbox.php
 
-response=$(curl -s -w "\n%{http_code}" -c "${MAM_COOKIES}" -b "${MAM_COOKIES}" "${MAM_URL}" 2>&1)
+response=$(curl -s -w "\n%{http_code}" -c "${MAM_COOKIES}.tmp" -b "${MAM_COOKIES}" "${MAM_URL}" 2>&1)
 http_code=$(echo "${response}" | tail -1)
 body=$(echo "${response}" | sed '$d')
+
+if [ "${http_code}" = "200" ]; then
+  mv "${MAM_COOKIES}.tmp" "${MAM_COOKIES}"
+else
+  rm -f "${MAM_COOKIES}.tmp"
+fi
 
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] cron (${http_code}): ${body}" >> "${MAM_LOG}"
 SCRIPT
@@ -49,8 +55,16 @@ log "init: crond started with hourly MAM update"
   log "init: VPN is up (wg0 UP, IP: ${vpn_ip}), running initial MAM seedbox update"
 
   # First call bootstraps the cookie jar with the mam_id cookie
-  response=$(curl -s -w "\n%{http_code}" -c "${MAM_COOKIES}" -b "mam_id=${MAM_ID}" "${MAM_URL}" 2>&1)
+  # Write to a temp file so a failed response doesn't wipe an existing jar
+  response=$(curl -s -w "\n%{http_code}" -c "${MAM_COOKIES}.tmp" -b "mam_id=${MAM_ID}" "${MAM_URL}" 2>&1)
   http_code=$(echo "${response}" | tail -1)
   body=$(echo "${response}" | sed '$d')
   log "init (${http_code}): ${body}"
+
+  if [ "${http_code}" = "200" ]; then
+    mv "${MAM_COOKIES}.tmp" "${MAM_COOKIES}"
+  else
+    rm -f "${MAM_COOKIES}.tmp"
+    log "init: bootstrap failed, keeping existing cookie jar"
+  fi
 ) &
