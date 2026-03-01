@@ -202,6 +202,32 @@ services:
       - homepage.widget.url=http://192.168.1.102:32400
       - homepage.widget.key=${PLEX_API_KEY}
 
+  audiobookshelf:
+    image: ghcr.io/advplyr/audiobookshelf:latest
+    container_name: audiobookshelf
+    <<: *common
+    volumes:
+      - ./config/audiobookshelf:/config
+      - ./config/audiobookshelf/metadata:/metadata
+      - /mnt/storage/torrents/books:/audiobooks
+    ports:
+      - 13378:80
+    healthcheck:
+      <<: *healthcheck
+      test:
+        [
+          "CMD-SHELL",
+          "wget -q --spider http://localhost:80/healthcheck || exit 1"
+        ]
+    labels:
+      - traefik.enable=false
+      - homepage.group=brr
+      - homepage.name=audiobookshelf
+      - homepage.icon=audiobookshelf.svg
+      - homepage.href=http://192.168.1.102:13378
+      - homepage.widget.type=audiobookshelf
+      - homepage.widget.url=http://192.168.1.102:13378
+
   sonarr:
     image: lscr.io/linuxserver/sonarr:develop
     container_name: sonarr
@@ -442,34 +468,6 @@ services:
       - homepage.widget.url=http://192.168.1.102:32786
       - homepage.widget.key=${LIDARR_API_KEY}
 
-  readarr:
-    image: linuxserver/readarr:0.4.18-develop # hardcoding version because it is deprecated
-    # build:
-    #   context: ./dockerfiles
-    #   dockerfile: ./readarr
-    container_name: readarr
-    <<: *common
-    volumes:
-      - ./config/readarr:/config
-      - /mnt/storage:/data
-    ports:
-      - 8787:8787
-    healthcheck:
-      <<: *healthcheck
-      test:
-        [
-          "CMD-SHELL",
-          "curl -f http://localhost:8787/readarr/ping || exit 1"
-        ]
-    depends_on:
-      qbittorrent:
-        condition: service_healthy
-      sabnzbd:
-        condition: service_healthy
-      prowlarr:
-        condition: service_healthy
-    labels:
-      - traefik.enable=false
 
   prowlarr:
     image: linuxserver/prowlarr:develop
@@ -588,8 +586,6 @@ services:
         condition: service_healthy
       lidarr:
         condition: service_healthy
-      readarr:
-        condition: service_healthy
     labels:
       - traefik.enable=false
       - homepage.group=brr
@@ -621,8 +617,6 @@ services:
       sonarr:
         condition: service_healthy
       lidarr:
-        condition: service_healthy
-      readarr:
         condition: service_healthy
     labels:
       - traefik.enable=false
