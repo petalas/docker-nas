@@ -762,3 +762,14 @@ services:
       - traefik.http.routers.it-tools.service=it-tools
       - traefik.http.routers.it-tools.tls=true
       - traefik.http.services.it-tools.loadbalancer.server.port=80
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    <<: *common
+    command: tunnel --config /etc/cloudflared/config.yml run
+    volumes:
+      - ./config/cloudflared:/etc/cloudflared:ro
+    depends_on:
+      traefik:
+        condition: service_started
