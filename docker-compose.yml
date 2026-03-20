@@ -748,3 +748,17 @@ services:
       UN_RADARR_0_TIMEOUT: 10s
       UN_RADARR_0_DELETE_ORIG: false
       UN_RADARR_0_DELETE_DELAY: 5m
+
+  it-tools:
+    image: corentinth/it-tools:latest
+    container_name: it-tools
+    <<: *common
+    ports:
+      - 8552:80
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.it-tools.entrypoints=websecure
+      - traefik.http.routers.it-tools.rule=Host(`it-tools.petalas.dev`)
+      - traefik.http.routers.it-tools.service=it-tools
+      - traefik.http.routers.it-tools.tls=true
+      - traefik.http.services.it-tools.loadbalancer.server.port=80
