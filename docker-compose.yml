@@ -551,7 +551,7 @@ services:
       # - homepage.widget.url=http://192.168.1.102:19999
 
   recyclarr:
-    image: ghcr.io/recyclarr/recyclarr
+    image: ghcr.io/recyclarr/recyclarr:8
     container_name: recyclarr
     <<: *common
     volumes:
